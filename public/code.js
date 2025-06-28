@@ -427,10 +427,11 @@ function getMaleLine() {
 }
 
 // clears inputs
-function clearInputs(firtsInput, secondInput) {
-  firtsInput.value = "";
-  secondInput.value = "";
+function clearInputs(firstInput, secondInput) {
+  if (firstInput) firstInput.value = "";
+  if (secondInput) secondInput.value = "";
 }
+
 
 function outputYears(obj){
   for (let key in obj){

@@ -5,6 +5,7 @@ const btnAnswer = document.getElementById('get_the_answer');
 const container = document.querySelector('.matrix-container');
 const errorOutput = document.querySelector('.errorOutput');
 const dateWrapper = document.querySelector('.input1-wrap');
+const btnDownloadPDF = document.getElementById('downloadPDF');
 
 // sets calendar limiter for dates that haven't occurred yet
 let today1 = new Date();
@@ -173,3 +174,122 @@ function valide(date, name) {
 nameInput.addEventListener('input', checkAllValid);
 dateInput.addEventListener('input', checkAllValid);
 genderInput.addEventListener('change', checkAllValid);
+
+btnDownloadPDF.addEventListener('click', () => {
+  const { jsPDF } = window.jspdf || window.jspdf.jsPDF || window.jspdf;
+  const doc = new jsPDF();
+
+  // Warna dan font
+  const titleColor = "#4b0082"; // ungu gelap
+  const textColor = "#333";
+  const tableBorderColor = "#4b0082";
+  const headerBgColor = "#4b0082";
+  const headerTextColor = "#fff";
+
+  // Judul besar
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.setTextColor(titleColor);
+  doc.text("Hasil Personal Matrix", 105, 20, null, null, "center");
+
+  // Garis bawah judul
+  doc.setDrawColor(75, 0, 130);
+  doc.setLineWidth(0.8);
+  doc.line(20, 25, 190, 25);
+
+  // Salam pembuka personal
+  const nama = titleCase(nameInput.value.trim());
+  const tanggal = document.querySelector('.output-personal-date')?.innerText || '';
+  const greeting = `Halo ${nama}, berikut hasil Personal Matrix kamu:`;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(textColor);
+  doc.text(greeting, 20, 35);
+  doc.text(tanggal, 20, 43);
+
+  // Garis pemisah
+  doc.setDrawColor(200);
+  doc.setLineWidth(0.2);
+  doc.line(20, 48, 190, 48);
+
+  // Pengaturan tabel
+  const startX = 20;
+  let startY = 55;
+  const colIndexWidth = 15;
+  const col1Width = 105;
+  const col2Width = 50;
+  const rowHeight = 10;
+
+  // HEADER (ungu) — 3 kolom
+  doc.setFillColor(headerBgColor);
+  doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+
+  doc.setDrawColor(tableBorderColor);
+  doc.setLineWidth(0.8);
+  doc.rect(startX, startY, colIndexWidth, rowHeight);
+  doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
+  doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor(headerTextColor);
+  doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
+  doc.text("Matrix", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
+  doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+
+  startY += rowHeight;
+
+  // ISI tabel
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(textColor);
+
+  const matrixValues = Object.entries(person.points);
+
+  matrixValues.forEach(([key, value], index) => {
+    if (startY + rowHeight > 280) {
+      doc.addPage();
+      startY = 20;
+
+      // Ulangi header di halaman baru
+      doc.setFillColor(headerBgColor);
+      doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+
+      doc.setDrawColor(tableBorderColor);
+      doc.setLineWidth(0.8);
+      doc.rect(startX, startY, colIndexWidth, rowHeight);
+      doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
+      doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.setTextColor(headerTextColor);
+      doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
+      doc.text("Matrix", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
+      doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+
+      startY += rowHeight;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      doc.setTextColor(textColor);
+    }
+
+    const cleanLabel = key.replace(/point/gi, "").toUpperCase();
+
+    doc.rect(startX, startY, colIndexWidth, rowHeight);
+    doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
+    doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+
+    doc.text(String(index + 1), startX + colIndexWidth / 2, startY + 7, null, null, "center");
+    doc.text(cleanLabel, startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
+    doc.text(String(value), startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+
+    startY += rowHeight;
+  });
+
+  doc.save("hasil_personal_matrix.pdf");
+});
+
+
+

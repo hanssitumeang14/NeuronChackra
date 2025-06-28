@@ -101,7 +101,7 @@ export default function CompatibilityMatrix() {
                         <div className="errorOutput1 text-red-500 mt-4 text-sm text-center" />
                     </div>
 
-                    <div className="flex flex-col text-white my-16 compatibility-container items-center">
+                   <div className="flex flex-col text-white my-16 compatibility-container items-center scroll-mt-28">
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-[#00ffff] drop-shadow-lg mb-6">
                             ✨ Kecocokan Kalian ✨
                         </h1>
@@ -111,21 +111,21 @@ export default function CompatibilityMatrix() {
 
                         <Compatibility />
                         <InfoTxtCompatibility />
-                        <Information />
+                       
 
                         <div className="flex flex-col items-center mb-14 space-y-4 mt-10">
                             <div className="flex flex-col items-center gap-6 mt-12 mb-16">
                                 <div className="relative group">
                                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 via-fuchsia-500 to-purple-600 
                                                     opacity-20 blur-xl rounded-full animate-pulse group-hover:opacity-30 transition"></div>
-                                    <button id="decode-matrix-btn" className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide 
+                                    <button id="showPDF" className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide 
                                                 bg-gradient-to-br from-[#3a0ca3] via-[#7209b7] to-[#4361ee] text-yellow-100 
                                                 shadow-[0_0_20px_rgba(124,58,237,0.6)] hover:scale-105 hover:shadow-[0_0_25px_rgba(255,255,255,0.3)]
                                                 transition-all duration-300 ease-in-out">
                                     ✨ Bingung bacanya gimana?
                                     </button>
                                 </div>
-                                <button id="download-btn"
+                                <button id="downloadPDF"
                                     className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-cyan-100 
                                     bg-[#1e1b4b] border border-white/20 backdrop-blur-md shadow-[0_0_12px_rgba(255,255,255,0.08)] 
                                     hover:bg-[#2c2674] hover:shadow-[0_0_24px_rgba(255,255,255,0.15)] transition-all duration-300 ease-in-out">
@@ -133,6 +133,7 @@ export default function CompatibilityMatrix() {
                                 </button>
                             </div>
                         </div>
+                         <Information />
                     </div>
                 </div>
             </div>

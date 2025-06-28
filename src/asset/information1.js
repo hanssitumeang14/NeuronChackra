@@ -1,6 +1,6 @@
-export default function Information() {
+export default function Information1() {
   return (
-    <div className="flex items-center rounded-2xl justify-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-10 px-5 mb-16">
+   <div className="flex items-center rounded-2xl justify-center bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 py-10 px-5 mb-16">
       <div id="accordion-collapse" data-accordion="collapse" className="w-full max-w-3xl">
         <h1 className="text-4xl font-cinzel text-center text-blue-400 mb-10 drop-shadow-none">
           Penjelasan

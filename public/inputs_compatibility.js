@@ -5,6 +5,7 @@ const inputSecondName = document.getElementById("name-partner2");
 const btnChart = document.getElementById('createChart');
 const compatibilityContainer = document.querySelector('.compatibility-container');
 const errorOutput1 = document.querySelector('.errorOutput1');
+const btnDownloadPDF1 = document.getElementById('downloadPDF');
 
 compatibilityContainer.style.display = 'none';
 
@@ -301,3 +302,132 @@ function clearInputs() {
     inputSecondName.value = '';
     hideButton();
 }
+
+// ===== Tambahan fungsi download PDF =====
+btnDownloadPDF1.addEventListener('click', () => {
+  const { jsPDF } = window.jspdf || window.jspdf.jsPDF || window.jspdf;
+  const doc = new jsPDF();
+
+  // Warna dan font
+  const titleColor = "#4b0082"; // ungu gelap
+  const textColor = "#333";
+  const tableBorderColor = "#4b0082";
+  const headerBgColor = "#4b0082";
+  const headerTextColor = "#fff";
+
+  // Judul besar
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.setTextColor(titleColor);
+  doc.text("Hasil Compatibility", 105, 20, null, null, "center");
+
+  // Garis bawah judul
+  doc.setDrawColor(75, 0, 130);
+  doc.setLineWidth(0.8);
+  doc.line(20, 25, 190, 25);
+
+  // Salam pembuka personal
+  const nama1 = titleCase(inputFirstName.value.trim());
+  const nama2 = titleCase(inputSecondName.value.trim());
+  const greeting = `Haiii! Ini hasil kecocokan kalian berdua atas nama: `;
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(textColor);
+  doc.text(greeting, 20, 35);
+
+  // Tanggal lahir
+  const output2 = document.querySelector('.output2')?.innerText || '';
+  doc.text(output2, 20, 43);
+
+  // Garis pemisah
+  doc.setDrawColor(200);
+  doc.setLineWidth(0.2);
+  doc.line(20, 48, 190, 48);
+
+  // Header tabel dengan kolom nomor baris
+  const startX = 20;
+  let startY = 55;
+  const colIndexWidth = 15;  // Lebar kolom nomor
+  const col1Width = 105;     // Lebar kolom Matrix Point dikurangi nomor
+  const col2Width = 50;
+  const rowHeight = 10;
+
+  // Background header
+  doc.setFillColor(headerBgColor);
+  doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+
+  // Border header kolom
+  doc.setDrawColor(tableBorderColor);
+  doc.setLineWidth(0.8);
+  doc.rect(startX, startY, colIndexWidth, rowHeight);
+  doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
+  doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+
+  // Header teks dengan warna putih dan rata tengah
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor(headerTextColor);
+
+  doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
+  doc.text("Matrix Point", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
+  doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+
+  startY += rowHeight;
+
+  // Isi tabel
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.setTextColor(textColor);
+
+  compatibilityMatrix.forEach((item, i) => {
+    // Break halaman jika perlu
+    if (startY + rowHeight > 280) {
+      doc.addPage();
+      startY = 20;
+
+      // Background header baru
+      doc.setFillColor(headerBgColor);
+      doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+
+      // Border header
+      doc.setDrawColor(tableBorderColor);
+      doc.setLineWidth(0.8);
+      doc.rect(startX, startY, colIndexWidth, rowHeight);
+      doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
+      doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+
+      // Header teks
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.setTextColor(headerTextColor);
+
+      doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
+      doc.text("Matrix Point", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
+      doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+
+      startY += rowHeight;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      doc.setTextColor(textColor);
+    }
+
+    const cleanName = item.id.replace(/compatibility|point/gi, "").toUpperCase();
+
+    // Kotak nomor, nama point dan nilai
+    doc.rect(startX, startY, colIndexWidth, rowHeight);
+    doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
+    doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+
+    // Teks nomor, nama, dan nilai rata tengah
+    doc.text(String(i + 1), startX + colIndexWidth / 2, startY + 7, null, null, "center");
+    doc.text(cleanName, startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
+    doc.text(String(item.value), startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+
+    startY += rowHeight;
+  });
+
+  // Save file
+  doc.save("compatibility-result.pdf");
+});
+
