@@ -2,26 +2,30 @@
 import Link from "next/link";
 
 export default function Home() {
- return (
-    <div className="flex items-center justify-center min-h-screen py-2 gap-5 bg-gradient-to-b from-[#1a0a3a] via-[#0b071d] to-[#000000]">
+  return (
+    <div className="flex items-center justify-center min-h-screen py-2 gap-6 bg-gradient-to-b from-gray-900 via-gray-800 to-black px-6">
       <Link
         href="/personal-matrix"
-        className="relative border-2 border-[#ffd700] text-[#ffd700] px-6 py-3 rounded-lg font-semibold
-                   hover:bg-[#ffd700] hover:text-black transition
-                   before:absolute before:-inset-1 before:rounded-lg before:bg-[#ffd700] before:opacity-30 before:blur-xl before:animate-glow
-                   after:absolute after:-inset-1 after:rounded-lg after:bg-[#ffd700] after:opacity-20 after:blur-2xl after:animate-glow-slower
-                   z-10"
+        className="relative border-2 border-yellow-600 text-yellow-600 px-8 py-3 rounded-lg font-semibold
+                   hover:bg-yellow-600 hover:text-black transition
+                   before:absolute before:-inset-1 before:rounded-lg before:bg-yellow-600 before:opacity-25 before:blur-lg before:animate-glow
+                   after:absolute after:-inset-2 after:rounded-lg after:bg-yellow-600 after:opacity-10 after:blur-2xl after:animate-glow-slower
+                   z-10
+                   focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2
+                   "
       >
         Personal Matrix
       </Link>
 
       <Link
         href="/compatibility-matrix"
-        className="relative border-2 border-[#00ffff] text-[#00ffff] px-6 py-3 rounded-lg font-semibold
-                   hover:bg-[#00ffff] hover:text-black transition
-                   before:absolute before:-inset-1 before:rounded-lg before:bg-[#00ffff] before:opacity-30 before:blur-xl before:animate-glow
-                   after:absolute after:-inset-1 after:rounded-lg after:bg-[#00ffff] after:opacity-20 after:blur-2xl after:animate-glow-slower
-                   z-10"
+        className="relative border-2 border-cyan-600 text-cyan-600 px-8 py-3 rounded-lg font-semibold
+                   hover:bg-cyan-600 hover:text-black transition
+                   before:absolute before:-inset-1 before:rounded-lg before:bg-cyan-600 before:opacity-25 before:blur-lg before:animate-glow
+                   after:absolute after:-inset-2 after:rounded-lg after:bg-cyan-600 after:opacity-10 after:blur-2xl after:animate-glow-slower
+                   z-10
+                   focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2
+                   "
       >
         Compatibility Matrix
       </Link>
@@ -29,28 +33,38 @@ export default function Home() {
       <style jsx>{`
         @keyframes glow {
           0%, 100% {
-            opacity: 0.3;
+            opacity: 0.25;
+            transform: scale(1);
+            box-shadow: 0 0 12px 4px;
           }
           50% {
-            opacity: 0.7;
+            opacity: 0.5;
+            transform: scale(1.03);
+            box-shadow: 0 0 20px 6px;
           }
         }
 
         @keyframes glow-slower {
           0%, 100% {
-            opacity: 0.2;
+            opacity: 0.1;
+            transform: scale(1);
+            box-shadow: 0 0 20px 10px;
           }
           50% {
-            opacity: 0.5;
+            opacity: 0.3;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px 15px;
           }
         }
 
         .animate-glow {
-          animation: glow 2s ease-in-out infinite;
+          animation: glow 3s ease-in-out infinite;
+          will-change: transform, opacity, box-shadow;
         }
 
         .animate-glow-slower {
-          animation: glow-slower 3.5s ease-in-out infinite;
+          animation: glow-slower 5s ease-in-out infinite;
+          will-change: transform, opacity, box-shadow;
         }
       `}</style>
     </div>

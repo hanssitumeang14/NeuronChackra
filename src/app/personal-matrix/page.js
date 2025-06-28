@@ -29,7 +29,7 @@ export default function PersonalMatrix() {
             <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 rounded-3xl shadow-lg p-6 sm:p-8 md:p-10 border border-slate-700 backdrop-blur-md ring-1 ring-slate-600">
               <div className="p-4 sm:p-6 md:px-20 lg:px-40">
                 <div className="personal-calculator bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-600 text-center">
-                  <p className="text-[#fcefb4] text-2xl sm:text-3xl md:text-4xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm">
+                  <p className="text-[#fcefb4] text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm">
                     ✨ Temukan Nasibmu ✨
                   </p>
                 </div>
