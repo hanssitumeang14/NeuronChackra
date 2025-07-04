@@ -364,7 +364,7 @@ document.querySelectorAll('*').forEach(el => {
     }
 
     const xOffset = (pageWidth - imgWidth) / 2;
-doc.addImage(imgData, 'PNG', xOffset, y, 100, 180);
+doc.addImage(imgData, 'PNG', margin, y, 100, 200);
     y += imgHeight + sectionSpacing;
   } catch (err) {
     console.error('Gagal render #info-text:', err);
