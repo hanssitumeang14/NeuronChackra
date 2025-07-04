@@ -1,5 +1,5 @@
 const dateInput = document.getElementById("date");
-const genderInput = document.getElementById("gender");
+const genderInputs = document.querySelectorAll('input[name="gender"]');
 const nameInput = document.getElementById("name");
 const btnAnswer = document.getElementById('get_the_answer');
 const container = document.querySelector('.matrix-container');
@@ -17,7 +17,7 @@ document.getElementById('date').setAttribute("min", ancientDate2.toLocaleDateStr
 // default input values for page reload
 dateInput.value = '';
 nameInput.value = '';
-genderInput.value = '';
+genderInputs.forEach(input => input.checked = false);
 
 let person = {};
 let points1 = {};
@@ -28,7 +28,8 @@ let years = {};
 function checkAllValid() {
   const name = nameInput.value.trim();
   const date = new Date(dateInput.value);
-  const gender = genderInput.value;
+  const selectedGender = document.querySelector('input[name="gender"]:checked');
+  const gender = selectedGender ? selectedGender.value : '';
   errorOutput.innerHTML = '';
 
   if (name && dateInput.value && gender) {
@@ -173,122 +174,145 @@ function valide(date, name) {
 
 nameInput.addEventListener('input', checkAllValid);
 dateInput.addEventListener('input', checkAllValid);
-genderInput.addEventListener('change', checkAllValid);
+genderInputs.forEach(input => input.addEventListener('change', checkAllValid));
 
-btnDownloadPDF.addEventListener('click', () => {
-  const { jsPDF } = window.jspdf || window.jspdf.jsPDF || window.jspdf;
-  const doc = new jsPDF();
+btnDownloadPDF.addEventListener('click', async () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-  // Warna dan font
-  const titleColor = "#4b0082"; // ungu gelap
-  const textColor = "#333";
-  const tableBorderColor = "#4b0082";
-  const headerBgColor = "#4b0082";
-  const headerTextColor = "#fff";
-
-  // Judul besar
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.setTextColor(titleColor);
-  doc.text("Hasil Personal Matrix", 105, 20, null, null, "center");
-
-  // Garis bawah judul
-  doc.setDrawColor(75, 0, 130);
-  doc.setLineWidth(0.8);
-  doc.line(20, 25, 190, 25);
-
-  // Salam pembuka personal
   const nama = titleCase(nameInput.value.trim());
   const tanggal = document.querySelector('.output-personal-date')?.innerText || '';
-  const greeting = `Halo ${nama}, berikut hasil Personal Matrix kamu:`;
 
-  doc.setFont("helvetica", "normal");
+  const textColor = [0, 0, 0];
+  const purple = [75, 0, 130];
+  const grey = [220];
+
+  const titleFontSize = 18;
+  const sectionSpacing = 8;
+
+  let y = 20;
+
+  // Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(titleFontSize);
+  doc.setTextColor(...purple);
+  doc.text('Hasil Personal Matrix', 105, y, null, null, 'center');
+
+  y += 7;
+  doc.setDrawColor(...purple);
+  doc.setLineWidth(0.5);
+  doc.line(20, y, 190, y);
+
+  y += sectionSpacing;
+
+  // Biodata
   doc.setFontSize(12);
-  doc.setTextColor(textColor);
-  doc.text(greeting, 20, 35);
-  doc.text(tanggal, 20, 43);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...textColor);
+  doc.text(`Halo: ${tanggal}`, 20, y);
 
-  // Garis pemisah
-  doc.setDrawColor(200);
-  doc.setLineWidth(0.2);
-  doc.line(20, 48, 190, 48);
+  y += 5;
+  doc.setLineWidth(0.1);
+  doc.setDrawColor(...grey);
+  doc.line(20, y, 190, y);
 
-  // Pengaturan tabel
-  const startX = 20;
-  let startY = 55;
-  const colIndexWidth = 15;
-  const col1Width = 105;
-  const col2Width = 50;
-  const rowHeight = 10;
+  y += sectionSpacing;
 
-  // HEADER (ungu) — 3 kolom
-  doc.setFillColor(headerBgColor);
-  doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+  const container = document.querySelector('.matrix-wrapper');
+  if (!container) {
+    alert('Elemen .matrix-wrapper tidak ditemukan');
+    return;
+  }
 
-  doc.setDrawColor(tableBorderColor);
-  doc.setLineWidth(0.8);
-  doc.rect(startX, startY, colIndexWidth, rowHeight);
-  doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
-  doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+  // Diagram SVG
+  doc.setFontSize(11);
+  doc.text(`Berikut tampilan hasil diagram kamu:`, 20, y);
+  y += 5;
 
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.setTextColor(headerTextColor);
-  doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
-  doc.text("Matrix", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
-  doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+  const svgElement = container.querySelector('svg');
+  if (svgElement && window.canvg) {
+    svgElement.querySelectorAll('*').forEach(el => {
+      const fill = window.getComputedStyle(el).fill;
+      if (fill === 'rgb(0, 0, 0)' || fill === '#000' || fill === 'black') {
+        el.setAttribute('fill', '#cccccc');
+      }
+    });
 
-  startY += rowHeight;
+    const svgString = new XMLSerializer().serializeToString(svgElement);
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 500;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // ISI tabel
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.setTextColor(textColor);
+    const v = await window.canvg.Canvg.fromString(ctx, svgString);
+    await v.render();
 
-  const matrixValues = Object.entries(person.points);
+    const imgData = canvas.toDataURL('image/png');
+    doc.addImage(imgData, 'PNG', 20, y, 170, 100);
 
-  matrixValues.forEach(([key, value], index) => {
-    if (startY + rowHeight > 280) {
-      doc.addPage();
-      startY = 20;
+    y += 100 + sectionSpacing;
+  }
 
-      // Ulangi header di halaman baru
-      doc.setFillColor(headerBgColor);
-      doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+  // Chakra Table
+  doc.setFontSize(11);
+  doc.setTextColor(...textColor);
+  doc.text(`Berikut tampilan hasil tabel chakra kamu:`, 20, y);
+  y += 5;
 
-      doc.setDrawColor(tableBorderColor);
-      doc.setLineWidth(0.8);
-      doc.rect(startX, startY, colIndexWidth, rowHeight);
-      doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
-      doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+  const table = container.querySelector('#chakra_table table');
+  if (table) {
+    doc.autoTable({
+      html: table,
+      startY: y,
+      styles: {
+        font: 'helvetica',
+        fontSize: 10,
+        textColor: textColor,
+      },
+      headStyles: {
+        fillColor: purple,
+        textColor: [255, 255, 255],
+      },
+      theme: 'grid',
+      margin: { left: 20, right: 20 },
+    });
 
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.setTextColor(headerTextColor);
-      doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
-      doc.text("Matrix", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
-      doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+    y = doc.lastAutoTable.finalY + sectionSpacing;
+  }
 
-      startY += rowHeight;
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.setTextColor(textColor);
+  // Info Text
+  doc.setFontSize(11);
+  doc.setTextColor(...textColor);
+  doc.text(`Berikut penjelasan hasil akhir kamu:`, 20, y);
+  y += 5;
+
+const containerText = document.querySelector('.matrix-wrapper');
+if (!containerText) {
+  alert('Elemen .matrix-wrapper tidak ditemukan');
+  return;
+}
+
+const infoText = container.querySelector('#info-text');
+
+  if (infoText) {
+    const rawText = infoText.textContent?.trim();
+    if (rawText?.length) {
+      // const lines = doc.splitTextToSize(rawText, 170);
+      // doc.setFontSize(11);
+      // doc.setTextColor(80);
+      // doc.text(lines, 20, y);
+      // y += lines.length * 5 + sectionSpacing;
+    } else {
+      console.warn('infoText kosong:', rawText);
     }
+  } else {
+    console.warn('Elemen .info-text tidak ditemukan');
+  }
 
-    const cleanLabel = key.replace(/point/gi, "").toUpperCase();
 
-    doc.rect(startX, startY, colIndexWidth, rowHeight);
-    doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
-    doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
-
-    doc.text(String(index + 1), startX + colIndexWidth / 2, startY + 7, null, null, "center");
-    doc.text(cleanLabel, startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
-    doc.text(String(value), startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
-
-    startY += rowHeight;
-  });
-
-  doc.save("hasil_personal_matrix.pdf");
+  doc.save('hasil_personal_matrix.pdf');
 });
 
 

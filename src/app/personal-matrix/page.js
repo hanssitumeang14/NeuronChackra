@@ -58,22 +58,31 @@ export default function PersonalMatrix() {
                         className="w-full bg-white/80 text-slate-900 border border-slate-500 rounded-xl px-4 py-3 sm:px-6 sm:py-4 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-300 transition"
                       />
 
-                      <div>
-                        <select
-                          id="gender"
-                          name="gender"
-                          className="w-full bg-white/80 text-slate-900 border border-slate-500 rounded-xl px-4 py-3 sm:px-6 sm:py-4 text-base shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-300 transition"
-                        >
-                          <option value="" disabled className="text-slate-500">
-                            Pilih Jenis Kelamin
-                          </option>
-                          <option value="laki-laki" className="text-black">
+                      <div className="flex justify-center space-x-4">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="laki-laki"
+                            name="gender"
+                            value="laki-laki"
+                            className="text-blue-500 focus:ring-blue-300"
+                          />
+                          <label htmlFor="laki-laki" className="text-white text-lg">
                             Laki-laki
-                          </option>
-                          <option value="perempuan" className="text-black">
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="radio"
+                            id="perempuan"
+                            name="gender"
+                            value="perempuan"
+                            className="text-pink-500 focus:ring-pink-300"
+                          />
+                          <label htmlFor="perempuan" className="text-white text-lg">
                             Perempuan
-                          </option>
-                        </select>
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -93,40 +102,47 @@ export default function PersonalMatrix() {
                 </div>
                 <div className="errorOutput text-base text-red-500 mt-4" />
               </div>
-
-              <div className="matrix-container">
-                <div className="w-full flex flex-col items-center justify-center">
-                  <div className="personal-calculator bg-gradient-to-br from-[#1f1a3a] via-[#121428] to-[#1c1e2f] p-4 sm:p-6 rounded-2xl shadow-lg border border-indigo-700/30">
-                    <p className="text-[#fcefb4] text-xl sm:text-2xl md:text-3xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm text-center">
-                      Hasil Perhitungan Personal
-                    </p>
-                  </div>
-                  <div className="output-personal-date text-[#fff8db] mt-4 p-6 bg-gradient-to-br from-[#121428] via-[#1e1b4b] to-[#1e293b] rounded-2xl shadow-lg backdrop-blur-md border border-[#fff8db]/10" />
-                  <Personal />
-                  <ChakraTable />
-                  <TextInfo />
-
-                  <div className="flex flex-col items-center mb-14 space-y-4 mt-10">
-                    <div className="flex flex-col items-center gap-6 mt-12 mb-16">
-                      <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-fuchsia-400 to-purple-500 opacity-10 blur-xl rounded-full animate-pulse group-hover:opacity-20 transition"></div>
+              <div className="matrix-wrapper">
+                <div className="matrix-container">
+                  <div className="w-full flex flex-col items-center justify-center">
+                    <div className="personal-calculator bg-gradient-to-br from-[#1f1a3a] via-[#121428] to-[#1c1e2f] p-4 sm:p-6 rounded-2xl shadow-lg border border-indigo-700/30">
+                      <p className="text-[#fcefb4] text-xl sm:text-2xl md:text-3xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm text-center">
+                        Hasil Perhitungan Personal
+                      </p>
+                    </div>
+                    <div className="output-personal-date text-[#fff8db] mt-4 p-6 bg-gradient-to-br from-[#121428] via-[#1e1b4b] to-[#1e293b] rounded-2xl shadow-lg backdrop-blur-md border border-[#fff8db]/10" />
+                    <Personal />
+                    <div className="w-full flex flex-col lg:flex-row gap-10 mt-10 px-4 lg:px-0">
+                      <div className="w-full lg:w-1/2">
+                        <ChakraTable />
+                      </div>
+                      <div id="info-text" className="w-full lg:w-1/2">
+                        <TextInfo />
+                      </div>
+                    </div>
+                    <div className="mt-14">
+                      <Information1 />
+                    </div>
+                    <div className="flex flex-col items-center mb-14 space-y-4">
+                      <div className="flex flex-col items-center gap-6 mt-12 mb-16">
+                        <div className="relative group">
+                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-fuchsia-400 to-purple-500 opacity-10 blur-xl rounded-full animate-pulse group-hover:opacity-20 transition"></div>
+                          <button
+                            id="decode-matrix-btn"
+                            className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide bg-gradient-to-br from-[#5e5fcf] via-[#6f88d2] to-[#4361ee] text-yellow-100 shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
+                          >
+                            ✨ Bingung bacanya gimana?
+                          </button>
+                        </div>
                         <button
-                          id="decode-matrix-btn"
-                          className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide bg-gradient-to-br from-[#5e5fcf] via-[#6f88d2] to-[#4361ee] text-yellow-100 shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
+                          id="downloadPDF"
+                          className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-cyan-100 bg-[#2c2a5a] border border-white/20 backdrop-blur-md shadow-md hover:bg-[#3a396b] transition-all duration-300 ease-in-out"
                         >
-                          ✨ Bingung bacanya gimana?
+                          ⬇️ Download PDF
                         </button>
                       </div>
-                      <button
-                        id="downloadPDF"
-                        className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-cyan-100 bg-[#2c2a5a] border border-white/20 backdrop-blur-md shadow-md hover:bg-[#3a396b] transition-all duration-300 ease-in-out"
-                      >
-                        ⬇️ Download PDF
-                      </button>
                     </div>
                   </div>
-
-                  <Information1 />
                 </div>
               </div>
             </div>
