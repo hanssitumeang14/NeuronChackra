@@ -290,8 +290,8 @@ btnDownloadPDF.addEventListener('click', async () => {
   doc.setFontSize(12);
   doc.setTextColor(...purple);
   if (y + 10 > pageHeight - margin) {
-  doc.addPage();  // Menambahkan halaman baru jika sudah mendekati batas
-  y = margin;  // Mengatur y kembali ke margin atas halaman baru
+  doc.addPage();  
+  y = margin;  
 }
   doc.text(`2. Table Personal Kamu:`, margin, y);
   y += 5;
@@ -320,10 +320,8 @@ btnDownloadPDF.addEventListener('click', async () => {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(12);
   doc.setTextColor(...purple);
-  if (y + 10 > pageHeight - margin) {
-  doc.addPage();  // Menambahkan halaman baru jika sudah mendekati batas
-  y = margin;  // Mengatur y kembali ke margin atas halaman baru
-}
+  doc.addPage();  
+  y = margin;  
   doc.text(`3. Penjelasan Detail:`, margin, y);
   y += 5;
 
@@ -336,15 +334,15 @@ document.querySelectorAll('*').forEach(el => {
   ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
     const value = style[prop];
     if (value.includes('oklab') || value.includes('oklch')) {
-      el.style[prop] = '#ffffff'; // fallback aman, bisa diganti sesuai tema
+      el.style[prop] = '#ffffff'; 
     }
   });
 });
 
 
     const canvas = await html2canvas(infoTextEl, {
-      scale: 3, // HD quality
-      backgroundColor: '#0a0a23', // latar belakang sama seperti web
+      scale: 3, 
+      backgroundColor: '#0a0a23', 
       useCORS: true
     });
 
@@ -366,7 +364,7 @@ document.querySelectorAll('*').forEach(el => {
     }
 
     const xOffset = (pageWidth - imgWidth) / 2;
-    doc.addImage(imgData, 'PNG', xOffset, y, imgWidth, imgHeight);
+doc.addImage(imgData, 'PNG', xOffset, y, 100, 150);
     y += imgHeight + sectionSpacing;
   } catch (err) {
     console.error('Gagal render #info-text:', err);
