@@ -304,130 +304,148 @@ function clearInputs() {
 }
 
 // ===== Tambahan fungsi download PDF =====
-btnDownloadPDF1.addEventListener('click', () => {
-  const { jsPDF } = window.jspdf || window.jspdf.jsPDF || window.jspdf;
-  const doc = new jsPDF();
+btnDownloadPDF1.addEventListener('click', async () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
-  // Warna dan font
-  const titleColor = "#4b0082"; // ungu gelap
-  const textColor = "#333";
-  const tableBorderColor = "#4b0082";
-  const headerBgColor = "#4b0082";
-  const headerTextColor = "#fff";
-
-  // Judul besar
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.setTextColor(titleColor);
-  doc.text("Hasil Compatibility", 105, 20, null, null, "center");
-
-  // Garis bawah judul
-  doc.setDrawColor(75, 0, 130);
-  doc.setLineWidth(0.8);
-  doc.line(20, 25, 190, 25);
-
-  // Salam pembuka personal
   const nama1 = titleCase(inputFirstName.value.trim());
   const nama2 = titleCase(inputSecondName.value.trim());
-  const greeting = `Haiii! Ini hasil kecocokan kalian berdua atas nama: `;
-  
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.setTextColor(textColor);
-  doc.text(greeting, 20, 35);
+  const tanggal = document.querySelector('.output2')?.innerText || '';
 
-  // Tanggal lahir
-  const output2 = document.querySelector('.output2')?.innerText || '';
-  doc.text(output2, 20, 43);
+  const textColor = [0, 0, 0];
+  const purple = [75, 0, 130];
+  const grey = [220];
+  const white = [255, 255, 255];
 
-  // Garis pemisah
-  doc.setDrawColor(200);
-  doc.setLineWidth(0.2);
-  doc.line(20, 48, 190, 48);
+  const sectionSpacing = 8;
+  const margin = 20;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
-  // Header tabel dengan kolom nomor baris
-  const startX = 20;
-  let startY = 55;
-  const colIndexWidth = 15;  // Lebar kolom nomor
-  const col1Width = 105;     // Lebar kolom Matrix Point dikurangi nomor
-  const col2Width = 50;
-  const rowHeight = 10;
+  let y = 20;
 
-  // Background header
-  doc.setFillColor(headerBgColor);
-  doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
-
-  // Border header kolom
-  doc.setDrawColor(tableBorderColor);
-  doc.setLineWidth(0.8);
-  doc.rect(startX, startY, colIndexWidth, rowHeight);
-  doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
-  doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
-
-  // Header teks dengan warna putih dan rata tengah
+  // Judul
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(14);
-  doc.setTextColor(headerTextColor);
+  doc.setFontSize(18);
+  doc.setTextColor(...purple);
+  doc.text("Hasil Compatibility Matrix", pageWidth / 2, y, null, null, "center");
 
-  doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
-  doc.text("Matrix Point", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
-  doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+  y += 7;
+  doc.setDrawColor(...purple);
+  doc.setLineWidth(0.5);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += sectionSpacing;
 
-  startY += rowHeight;
-
-  // Isi tabel
-  doc.setFont("helvetica", "normal");
+  // Biodata
   doc.setFontSize(12);
-  doc.setTextColor(textColor);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(...textColor);
+  doc.text(`Hai! Ini hasil kecocokan antara ${nama1} dan ${nama2}:`, margin, y);
+  y += 5;
+  doc.text(tanggal, margin, y);
+  y += 5;
+  doc.setDrawColor(...grey);
+  doc.setLineWidth(0.1);
+  doc.line(margin, y, pageWidth - margin, y);
+  y += sectionSpacing;
 
-  compatibilityMatrix.forEach((item, i) => {
-    // Break halaman jika perlu
-    if (startY + rowHeight > 280) {
-      doc.addPage();
-      startY = 20;
+  // ---------------------------------------
+  // 1. Diagram SVG Compatibility
+  // ---------------------------------------
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(...purple);
+  doc.text("1. Diagram Kecocokan Kalian", margin, y);
+  y += 5;
 
-      // Background header baru
-      doc.setFillColor(headerBgColor);
-      doc.rect(startX, startY, colIndexWidth + col1Width + col2Width, rowHeight, 'F');
+  const svgElement = document.querySelector(".compatibility-container svg");
+  if (svgElement && window.canvg) {
+    svgElement.querySelectorAll("*").forEach(el => {
+      const style = getComputedStyle(el);
+      if (style.fill && style.fill !== 'none') el.setAttribute('fill', style.fill);
+      if (style.stroke && style.stroke !== 'none') el.setAttribute('stroke', style.stroke);
+    });
 
-      // Border header
-      doc.setDrawColor(tableBorderColor);
-      doc.setLineWidth(0.8);
-      doc.rect(startX, startY, colIndexWidth, rowHeight);
-      doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
-      doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+    const svgString = new XMLSerializer().serializeToString(svgElement);
+    const canvas = document.createElement("canvas");
+    canvas.width = (svgElement.clientWidth || 500) * 2;
+    canvas.height = (svgElement.clientHeight || 500) * 2;
 
-      // Header teks
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.setTextColor(headerTextColor);
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      doc.text("#", startX + colIndexWidth / 2, startY + 7, null, null, "center");
-      doc.text("Matrix Point", startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
-      doc.text("Value", startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+    const v = await window.canvg.Canvg.fromString(ctx, svgString);
+    await v.render();
 
-      startY += rowHeight;
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.setTextColor(textColor);
+    const imgData = canvas.toDataURL("image/png");
+    const ratio = canvas.height / canvas.width;
+    let imgW = pageWidth - 2 * margin;
+    let imgH = imgW * ratio;
+    if (imgH > pageHeight - y - margin) {
+      imgH = pageHeight - y - margin;
+      imgW = imgH / ratio;
     }
 
-    const cleanName = item.id.replace(/compatibility|point/gi, "").toUpperCase();
+    const xOffset = (pageWidth - imgW) / 2;
+    doc.addImage(imgData, "PNG", xOffset, y, imgW, imgH);
+    y += imgH + sectionSpacing;
+  }
 
-    // Kotak nomor, nama point dan nilai
-    doc.rect(startX, startY, colIndexWidth, rowHeight);
-    doc.rect(startX + colIndexWidth, startY, col1Width, rowHeight);
-    doc.rect(startX + colIndexWidth + col1Width, startY, col2Width, rowHeight);
+  // ---------------------------------------
+  // 2. Info Text Compatibility
+  // ---------------------------------------
+  const infoEl = document.querySelector("#info-text-compatibility");
+  if (infoEl) {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(12);
+    doc.setTextColor(...purple);
+    if (y + 10 > pageHeight - margin) {
+  doc.addPage();  // Menambahkan halaman baru jika sudah mendekati batas
+  y = margin;  // Mengatur y kembali ke margin atas halaman baru
+}
+    doc.text("2. Penjelasan Detail Kecocokan", margin, y);
+    y += 5;
 
-    // Teks nomor, nama, dan nilai rata tengah
-    doc.text(String(i + 1), startX + colIndexWidth / 2, startY + 7, null, null, "center");
-    doc.text(cleanName, startX + colIndexWidth + col1Width / 2, startY + 7, null, null, "center");
-    doc.text(String(item.value), startX + colIndexWidth + col1Width + col2Width / 2, startY + 7, null, null, "center");
+    try {
+    document.querySelectorAll('*').forEach(el => {
+    const style = getComputedStyle(el);
+    ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
+        const value = style[prop];
+        if (value.includes('oklab') || value.includes('oklch')) {
+        el.style[prop] = '#ffffff'; // fallback aman, bisa diganti sesuai tema
+        }
+    });
+    });
+    
+      const canvas = await html2canvas(infoEl, {
+        scale: 3,
+        backgroundColor: "#0a0a23",
+        useCORS: true
+      });
 
-    startY += rowHeight;
-  });
+      const imgData = canvas.toDataURL("image/png");
+      const ratio = canvas.height / canvas.width;
+      let imgW = pageWidth - 2 * margin;
+      let imgH = imgW * ratio;
+      if (imgH > pageHeight - y - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      if (imgH > pageHeight - y - margin) {
+        imgH = pageHeight - y - margin;
+        imgW = imgH / ratio;
+      }
 
-  // Save file
-  doc.save("compatibility-result.pdf");
+      const xOffset = (pageWidth - imgW) / 2;
+      doc.addImage(imgData, "PNG", xOffset, y, imgW, imgH);
+      y += imgH + sectionSpacing;
+    } catch (err) {
+      console.error("Gagal render info-text-compatibility:", err);
+    }
+  }
+
+  doc.save("hasil_compatibility_matrix.pdf");
 });
+
 

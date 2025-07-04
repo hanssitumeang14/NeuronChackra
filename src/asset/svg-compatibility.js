@@ -12,12 +12,13 @@ export default function Compatibility() {
                     max-height: 800px;
                     min-width: 300px;
                     min-height: 300px;
-                    display: block
+                    display: block;
+                    background-color: #1b1b2f;
                 }
 
                 .big-circle, .small-circle, .medium-circle {
                     fill: none;
-                    stroke: black;
+                    stroke: #8884d8;
                 }
 
                 .matrix-container,
@@ -34,7 +35,7 @@ export default function Compatibility() {
                 .cls-18 {
                     stroke-width: 1.5px;
                     stroke-miterlimit: 10;
-                    stroke: white;
+                    stroke: #d1d5db;
                     fill: none;
                 }
 
@@ -44,103 +45,54 @@ export default function Compatibility() {
 
                 .cls-5,
                 .cls-6 {
-                    stroke: #b653f7;
-                    fill: #b653f7;
+                    stroke: #a78bfa;
+                    fill: #a78bfa;
                 }
 
                 .cls-7,
                 .cls-8 {
-                    stroke: #ea4631;
-                    fill: #ea4631;
+                    stroke: #f87171;
+                    fill: #f87171;
                 }
 
                 .cls-10 {
-                    fill: #b653f7;
+                    fill: #c084fc;
                 }
 
                 .cls-13 {
-                    fill: #3d54f5;
+                    fill: #60a5fa;
                 }
 
                 .cls-15 {
-                    fill: #74e0f8;
+                    fill: #5eead4;
                 }
 
                 .cls-19 {
-                    fill: #ea4631;
+                    fill: #f87171;
                 }
 
                 .cls-22 {
-                    fill: #ed7233;
+                    fill: #fb923c;
                 }
 
                 .cls-25 {
-                    fill: #ebdc00;
+                    fill: #facc15;
                 }
 
                 .cls-26 {
-                    fill: #b6fd57;
+                    fill: #bbf7d0;
                 }
 
                 .cls-24,
                 .cls-21,
                 .cls-23,
                 .cls-53 {
-                    fill: #fffcf0;
+                    fill: #f3f4f6;
                 }
 
                 .matrix-value-point {
                     text-anchor: middle;
                     alignment-baseline: middle;
-                }
-
-                .cls-28 {
-                    font-size: 12.9501px;
-                    line-height: 11px;
-                }
-
-                .cls-29 {
-                    font-size: 12.0251px;
-                    line-height: 10px;
-                }
-
-                .cls-33 {
-                    font-size: 12px;
-                    line-height: 81.9%;
-                }
-
-                .cls-43 {
-                    font-size: 5.76471px;
-                    line-height: 81.9%;
-                }
-
-                .cls-44 {
-                    font-size: 10px;
-                    line-height: 81.9%;
-                }
-
-                .cls-54,
-                .cls-55,
-                .cls-56 {
-                    font-size: 29.7851px;
-                    line-height: 37px;
-                }
-
-                .cls-57,
-                .cls-58 {
-                    font-size: 17.2946px;
-                    line-height: 22px;
-                }
-
-                .cls-59,
-                .cls-60 {
-                    font-size: 21.1378px;
-                    line-height: 26px;
-                }
-
-                .cls-61 {
-                    font-size: 6px;
-                    line-height: 81.9%;
                 }
 
                 .cls-28,
@@ -152,19 +104,19 @@ export default function Compatibility() {
                 .cls-57,
                 .cls-59,
                 .cls-61 {
-                    fill: #f5f5f5;
+                    fill: #f3f4f6;
                 }
 
                 .cls-55,
                 .cls-58,
                 .cls-60 {
-                    fill: #000000;
+                    fill: #0f172a;
                 }
 
                 .cls-56 {
-                    fill: #d2b154;
+                    fill: #fcd34d;
                 }
-                    
+
                 .pento {
                     width: 100%;
                     height: 100%;
@@ -172,7 +124,7 @@ export default function Compatibility() {
                     justify-content: center;
                 }
             `}
-                
+
             </style>
 
             <div className="pento mt-5">

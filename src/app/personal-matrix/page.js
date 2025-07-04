@@ -15,7 +15,7 @@ export default function PersonalMatrix() {
         <div className="absolute inset-0 -z-10">
           <div className="w-full h-full grid grid-cols-12 gap-px opacity-5">
             {Array.from({ length: 144 }).map((_, i) => (
-              <div key={i} className="bg-white/5 aspect-square" />
+              <div key={i} className="bg-[#ffffff0d] aspect-square" />
             ))}
           </div>
         </div>
@@ -23,17 +23,17 @@ export default function PersonalMatrix() {
         <div className="container max-w-screen-xl mx-auto px-4 sm:px-6 md:px-10 relative z-10">
           <div className="relative flex justify-center items-center uppercase py-16 text-white">
             <div className="absolute inset-0 flex justify-center items-center -z-10">
-              <div className="w-[50em] h-[1.875em] bg-yellow-100/10 blur-[4.6875em]" />
+              <div className="w-[50em] h-[1.875em] bg-[#fef9c340] blur-[75px]" />
             </div>
 
-            <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-gray-900 rounded-3xl shadow-lg w-full p-6 sm:p-8 md:p-10 border border-slate-700 backdrop-blur-md ring-1 ring-slate-600">
+            <div className="bg-gradient-to-br from-[#1e293b] via-[#0f172a] to-[#1e293b] rounded-3xl shadow-lg w-full p-6 sm:p-8 md:p-10 border border-[#334155] backdrop-blur-md ring-1 ring-[#475569]">
               {/* Judul */}
               <div className="p-4 sm:p-6 md:px-20 lg:px-40">
-                <div className="personal-calculator bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-600 text-center">
-                 <p className="text-[#fcefb4] text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm text-center px-4">
-                  ✨ Temukan Nasibmu ✨
-                </p>
-               </div>
+                <div className="personal-calculator bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] p-6 sm:p-8 rounded-2xl shadow-lg border border-[#475569] text-center">
+                  <p className="text-[#fcefb4] text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm text-center px-4">
+                    ✨ Temukan Nasibmu ✨
+                  </p>
+                </div>
               </div>
 
               {/* Form */}
@@ -43,7 +43,7 @@ export default function PersonalMatrix() {
                 </p>
 
                 <div className="px-4">
-                  <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 p-6 sm:p-8 rounded-2xl shadow-lg backdrop-blur-md border border-slate-700">
+                  <div className="bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] p-6 sm:p-8 rounded-2xl shadow-lg backdrop-blur-md border border-[#334155]">
                     <div className="space-y-6 max-w-xl mx-auto">
                       <input
                         id="name"
@@ -103,35 +103,31 @@ export default function PersonalMatrix() {
               <div className="matrix-wrapper w-full">
                 <div className="matrix-container">
                   <div className="w-full flex flex-col items-center justify-center">
-                    <div className="personal-calculator bg-gradient-to-br from-[#1f1a3a] via-[#121428] to-[#1c1e2f] p-4 sm:p-6 rounded-2xl shadow-lg border border-indigo-700/30">
+                    <div className="personal-calculator bg-gradient-to-br from-[#1f1a3a] via-[#121428] to-[#1c1e2f] p-4 sm:p-6 rounded-2xl shadow-lg border border-[#4338ca4d]">
                       <p className="text-[#fcefb4] text-xl sm:text-2xl md:text-3xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm text-center">
                         Hasil Perhitungan Personal
                       </p>
                     </div>
-                    <div className="output-personal-date text-[#fff8db] mt-4 p-6 bg-gradient-to-br from-[#121428] via-[#1e1b4b] to-[#1e293b] rounded-2xl shadow-lg backdrop-blur-md border border-[#fff8db]/10" />
+                    <div className="output-personal-date text-[#fff8db] mt-4 p-6 bg-gradient-to-br from-[#121428] via-[#1e1b4b] to-[#1e293b] rounded-2xl shadow-lg backdrop-blur-md border border-[#fff8db1a]" />
 
                     <Personal />
 
                     <div className="w-full flex flex-col lg:flex-row gap-10 mt-10 px-4">
-                      {/* Tabel Chakra Responsive */}
                       <div className="w-full lg:w-1/2 overflow-x-auto">
                         <ChakraTable />
                       </div>
-                      {/* Info Text */}
-                      <div id="info-text" className="w-full lg:w-1/2">
-                        <TextInfo />
-                      </div>
+                       <div id="info-text" className="w-full lg:w-1/2 flex-grow">
+                    <TextInfo />
+                  </div>
                     </div>
 
-                    {/* Info Tambahan */}
                     <div className="mt-14 w-full px-4 sm:px-6 md:px-12">
                       <Information1 />
                     </div>
 
-                    {/* Tombol Help & PDF */}
                     <div className="flex flex-col items-center mb-14 space-y-4 mt-16">
                       <div className="relative group">
-                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-fuchsia-400 to-purple-500 opacity-10 blur-xl rounded-full animate-pulse group-hover:opacity-20 transition"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-fuchsia-400 to-purple-500 opacity-10 blur-xl rounded-full animate-pulse group-hover:opacity-20 transition" />
                         <button
                           id="decode-matrix-btn"
                           className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide bg-gradient-to-br from-[#5e5fcf] via-[#6f88d2] to-[#4361ee] text-yellow-100 shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"

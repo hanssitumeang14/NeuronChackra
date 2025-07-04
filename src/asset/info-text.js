@@ -1,6 +1,6 @@
 export default function TextInfo() {
   return (
-    <div className="text-white font-[Roboto] w-full space-y-10">
+    <div className="text-[#ffffff] font-[Roboto] w-full space-y-8 sm:space-y-10">
       <style>
         {`
           .base-circle {
@@ -15,25 +15,25 @@ export default function TextInfo() {
             box-shadow: 0 0 10px #00ffff88, inset 0 0 5px #00ffff44;
             font-family: 'Cinzel', serif;
             color: #ffd700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
           }
         `}
       </style>
 
       {/* Leluhur */}
-      <div className="grid grid-cols-1 gap-6 bg-[#0e0c24] border border-indigo-800/50 rounded-xl shadow-lg backdrop-blur-md p-4">
-        <div className="text-center space-y-2">
-          <h3 className="font-cinzel text-base text-[#ffd700] tracking-wider">Garis Leluhur (Pria)</h3>
-          <div className="flex justify-center gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 bg-[#0e0c24] border border-[#3730a3] rounded-xl shadow-lg backdrop-blur-md p-4 sm:p-6">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <h3 className="font-cinzel text-lg sm:text-xl lg:text-2xl text-[#ffd700] tracking-wider">Garis Leluhur (Pria)</h3>
+          <div className="flex justify-center gap-3 sm:gap-4">
             <span id="malelinepoint1" className="base-circle">18</span>
             <span id="malelinepoint2" className="base-circle">18</span>
             <span id="malelinepoint3" className="base-circle">18</span>
           </div>
         </div>
-        <div className="text-center space-y-2">
-          <h3 className="font-cinzel text-base text-[#ff00cc] tracking-wider">Garis Leluhur (Wanita)</h3>
-          <div className="flex justify-center gap-2">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <h3 className="font-cinzel text-lg sm:text-xl lg:text-2xl text-[#ff00cc] tracking-wider">Garis Leluhur (Wanita)</h3>
+          <div className="flex justify-center gap-3 sm:gap-4">
             <span id="femalelinepoint1" className="base-circle">18</span>
             <span id="femalelinepoint2" className="base-circle">18</span>
             <span id="femalelinepoint3" className="base-circle">18</span>
@@ -41,22 +41,23 @@ export default function TextInfo() {
         </div>
       </div>
 
-      {/* Tujuan Personal, Sosial, Spirit */}
-      <div className="flex flex-col gap-6">
-        {/* Tujuan Personal */}
-        <div className="bg-[#0f0c2d] border border-purple-800/60 rounded-xl p-4 shadow-md backdrop-blur">
-          <h3 className="font-cinzel text-center text-sm text-cyan-300">Tujuan Personal</h3>
-          <p className="text-xs text-center text-white/80 mt-1">
+      {/* Tujuan Personal */}
+      <div className="flex flex-col gap-4 sm:gap-6">
+        <div className="bg-[#0f0c2d] border border-[#6b21a8] rounded-xl p-4 sm:p-6 shadow-md backdrop-blur">
+          <h3 className="font-cinzel text-center text-lg sm:text-xl lg:text-2xl text-[#67e8f9]">Tujuan Personal</h3>
+          <p className="text-sm sm:text-base text-center text-[#cccccc] mt-2">
             Minat, bakat, kebiasaan, serta keseimbangan energi maskulin dan feminin
           </p>
           <div className="flex justify-center mt-4">
-            <table className="table-auto text-sm">
+            <table className="table-auto text-sm sm:text-lg">
               <tbody>
                 <tr>
-                  <td className="pr-1 text-right align-middle">Sky:</td>
-                  <td className="px-1"><span id="skypoint" className="base-circle">13</span></td>
+                  <td className="pr-2 text-right align-middle">Sky:</td>
+                  <td className="px-2">
+                    <span id="skypoint" className="base-circle">13</span>
+                  </td>
                   <td rowSpan={2} className="px-2 align-middle">
-                    <svg width="40" height="65" viewBox="0 0 45 61" fill="none">
+                    <svg width="45" height="70" viewBox="0 0 45 61" fill="none">
                       <path d="M0.422852 1.06299H21.6661V60.0719H0.422852" stroke="#F9F9F8" strokeWidth="1.2" />
                       <path d="M44.68 30.5674H21.6665" stroke="#F9F9F8" strokeWidth="1.2" />
                     </svg>
@@ -66,8 +67,10 @@ export default function TextInfo() {
                   </td>
                 </tr>
                 <tr>
-                  <td className="pr-1 text-right align-middle">Earth:</td>
-                  <td className="px-1"><span id="earthpoint" className="base-circle">19</span></td>
+                  <td className="pr-2 text-right align-middle">Earth:</td>
+                  <td className="px-2">
+                    <span id="earthpoint" className="base-circle">19</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -75,19 +78,21 @@ export default function TextInfo() {
         </div>
 
         {/* Tujuan Sosial */}
-        <div className="bg-[#0f0c2d] border border-pink-500/40 rounded-xl p-4 shadow-md backdrop-blur">
-          <h3 className="font-cinzel text-center text-sm text-pink-400">Tujuan Sosial</h3>
-          <p className="text-xs text-center text-white/80 mt-1">
+        <div className="bg-[#0f0c2d] border border-[#6b21a8] rounded-xl p-4 sm:p-6 shadow-md backdrop-blur">
+          <h3 className="font-cinzel text-center text-lg sm:text-xl lg:text-2xl text-[#f9a8d4]">Tujuan Sosial</h3>
+          <p className="text-sm sm:text-base text-center text-[#cccccc] mt-2">
             Tugas terhadap genus, hasil di masyarakat
           </p>
           <div className="flex justify-center mt-4">
-            <table className="table-auto text-sm">
+            <table className="table-auto text-sm sm:text-lg">
               <tbody>
                 <tr>
-                  <td className="pr-1 text-right align-middle">M:</td>
-                  <td className="px-1"><span id="malepoint" className="base-circle">5</span></td>
+                  <td className="pr-2 text-right align-middle">M:</td>
+                  <td className="px-2">
+                    <span id="malepoint" className="base-circle">5</span>
+                  </td>
                   <td rowSpan={2} className="px-2 align-middle">
-                    <svg width="40" height="65" viewBox="0 0 45 61" fill="none">
+                    <svg width="45" height="70" viewBox="0 0 45 61" fill="none">
                       <path d="M0.422852 1.06299H21.6661V60.0719H0.422852" stroke="#F9F9F8" strokeWidth="1.2" />
                       <path d="M44.68 30.5674H21.6665" stroke="#F9F9F8" strokeWidth="1.2" />
                     </svg>
@@ -97,8 +102,10 @@ export default function TextInfo() {
                   </td>
                 </tr>
                 <tr>
-                  <td className="pr-1 text-right align-middle">F:</td>
-                  <td className="px-1"><span id="femalepoint" className="base-circle">5</span></td>
+                  <td className="pr-2 text-right align-middle">F:</td>
+                  <td className="px-2">
+                    <span id="femalepoint" className="base-circle">5</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -106,15 +113,15 @@ export default function TextInfo() {
         </div>
 
         {/* Tujuan Umum & Planet */}
-        <div className="grid grid-cols-2 gap-4 bg-[#0e0c24] border border-indigo-900/50 rounded-xl p-4 shadow-md backdrop-blur text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 bg-[#0e0c24] border border-[#312e81] rounded-xl p-4 sm:p-6 shadow-md backdrop-blur text-center">
           <div>
-            <h3 className="font-cinzel text-sm text-cyan-400">Tujuan Umum</h3>
-            <p className="text-xs text-white/90 mt-1">Apa jalan spiritual saya?</p>
+            <h3 className="font-cinzel text-lg sm:text-xl lg:text-2xl text-[#67e8f9]">Tujuan Umum</h3>
+            <p className="text-sm sm:text-base text-[#e5e5e5] mt-2">Apa jalan spiritual saya?</p>
             <span id="generalpurpose" className="base-circle mt-3 inline-block">12</span>
           </div>
           <div>
-            <h3 className="font-cinzel text-sm text-purple-300">Tujuan Planet</h3>
-            <p className="text-xs text-white/90 mt-1">Panggilan jiwa secara global</p>
+            <h3 className="font-cinzel text-lg sm:text-xl lg:text-2xl text-[#c4b5fd]">Tujuan Planet</h3>
+            <p className="text-sm sm:text-base text-[#e5e5e5] mt-2">Panggilan jiwa secara global</p>
             <span id="planetarypurpose" className="base-circle mt-3 inline-block">15</span>
           </div>
         </div>

@@ -178,7 +178,7 @@ genderInputs.forEach(input => input.addEventListener('change', checkAllValid));
 
 btnDownloadPDF.addEventListener('click', async () => {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
   const nama = titleCase(nameInput.value.trim());
   const tanggal = document.querySelector('.output-personal-date')?.innerText || '';
@@ -189,6 +189,10 @@ btnDownloadPDF.addEventListener('click', async () => {
 
   const titleFontSize = 18;
   const sectionSpacing = 8;
+  const margin = 20;
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
 
   let y = 20;
 
@@ -196,12 +200,12 @@ btnDownloadPDF.addEventListener('click', async () => {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(titleFontSize);
   doc.setTextColor(...purple);
-  doc.text('Hasil Personal Matrix', 105, y, null, null, 'center');
+  doc.text('Hasil Personal Matrix', pageWidth / 2, y, null, null, 'center');
 
   y += 7;
   doc.setDrawColor(...purple);
   doc.setLineWidth(0.5);
-  doc.line(20, y, 190, y);
+  doc.line(margin, y, pageWidth - margin, y);
 
   y += sectionSpacing;
 
@@ -209,12 +213,12 @@ btnDownloadPDF.addEventListener('click', async () => {
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...textColor);
-  doc.text(`Halo: ${tanggal}`, 20, y);
+  doc.text(`Halo: ${tanggal}`, margin, y);
 
   y += 5;
   doc.setLineWidth(0.1);
   doc.setDrawColor(...grey);
-  doc.line(20, y, 190, y);
+  doc.line(margin, y, pageWidth - margin, y);
 
   y += sectionSpacing;
 
@@ -225,40 +229,71 @@ btnDownloadPDF.addEventListener('click', async () => {
   }
 
   // Diagram SVG
-  doc.setFontSize(11);
-  doc.text(`Berikut tampilan hasil diagram kamu:`, 20, y);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(...purple);
+  doc.text(`1. Hasil Diagram Kamu:`, margin, y);
   y += 5;
 
   const svgElement = container.querySelector('svg');
   if (svgElement && window.canvg) {
+    // Force copy inline styles (fill/stroke)
     svgElement.querySelectorAll('*').forEach(el => {
-      const fill = window.getComputedStyle(el).fill;
-      if (fill === 'rgb(0, 0, 0)' || fill === '#000' || fill === 'black') {
-        el.setAttribute('fill', '#cccccc');
-      }
+      const computedStyle = window.getComputedStyle(el);
+      const fill = computedStyle.fill;
+      const stroke = computedStyle.stroke;
+      if (fill && fill !== 'none') el.setAttribute('fill', fill);
+      if (stroke && stroke !== 'none') el.setAttribute('stroke', stroke);
     });
 
     const svgString = new XMLSerializer().serializeToString(svgElement);
     const canvas = document.createElement('canvas');
-    canvas.width = 500;
-    canvas.height = 500;
+    const originalWidth = svgElement.clientWidth || 500;
+    const originalHeight = svgElement.clientHeight || 500;
+    canvas.width = originalWidth * 2; // Higher resolution
+    canvas.height = originalHeight * 2;
+
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const v = await window.canvg.Canvg.fromString(ctx, svgString);
-    await v.render();
+    try {
+      const v = await window.canvg.Canvg.fromString(ctx, svgString);
+      await v.render();
 
-    const imgData = canvas.toDataURL('image/png');
-    doc.addImage(imgData, 'PNG', 20, y, 170, 100);
+      const imgData = canvas.toDataURL('image/png');
 
-    y += 100 + sectionSpacing;
+      const aspectRatio = canvas.height / canvas.width;
+
+      const maxScale = 1.2;
+      const maxImgWidth = (pageWidth - 2 * margin) * maxScale;
+      const maxImgHeight = (pageHeight - y - margin) * maxScale;
+
+      let imgWidth = maxImgWidth;
+      let imgHeight = imgWidth * aspectRatio;
+
+      if (imgHeight > maxImgHeight) {
+        imgHeight = maxImgHeight;
+        imgWidth = imgHeight / aspectRatio;
+      }
+
+      const xOffset = (pageWidth - imgWidth) / 2;
+      doc.addImage(imgData, 'PNG', xOffset, y, imgWidth, imgHeight);
+      y += imgHeight + sectionSpacing;
+    } catch (error) {
+      console.error('Error rendering SVG:', error);
+    }
   }
 
   // Chakra Table
-  doc.setFontSize(11);
-  doc.setTextColor(...textColor);
-  doc.text(`Berikut tampilan hasil tabel chakra kamu:`, 20, y);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(...purple);
+  if (y + 10 > pageHeight - margin) {
+  doc.addPage();  // Menambahkan halaman baru jika sudah mendekati batas
+  y = margin;  // Mengatur y kembali ke margin atas halaman baru
+}
+  doc.text(`2. Table Personal Kamu:`, margin, y);
   y += 5;
 
   const table = container.querySelector('#chakra_table table');
@@ -276,44 +311,72 @@ btnDownloadPDF.addEventListener('click', async () => {
         textColor: [255, 255, 255],
       },
       theme: 'grid',
-      margin: { left: 20, right: 20 },
+      margin: { left: margin, right: margin },
     });
 
     y = doc.lastAutoTable.finalY + sectionSpacing;
   }
-
-  // Info Text
-  doc.setFontSize(11);
-  doc.setTextColor(...textColor);
-  doc.text(`Berikut penjelasan hasil akhir kamu:`, 20, y);
+  
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(...purple);
+  if (y + 10 > pageHeight - margin) {
+  doc.addPage();  // Menambahkan halaman baru jika sudah mendekati batas
+  y = margin;  // Mengatur y kembali ke margin atas halaman baru
+}
+  doc.text(`3. Penjelasan Detail:`, margin, y);
   y += 5;
 
-const containerText = document.querySelector('.matrix-wrapper');
-if (!containerText) {
-  alert('Elemen .matrix-wrapper tidak ditemukan');
-  return;
-}
+ const infoTextEl = container.querySelector('#info-text');
+if (infoTextEl) {
+  try {
 
-const infoText = container.querySelector('#info-text');
-
-  if (infoText) {
-    const rawText = infoText.textContent?.trim();
-    if (rawText?.length) {
-      // const lines = doc.splitTextToSize(rawText, 170);
-      // doc.setFontSize(11);
-      // doc.setTextColor(80);
-      // doc.text(lines, 20, y);
-      // y += lines.length * 5 + sectionSpacing;
-    } else {
-      console.warn('infoText kosong:', rawText);
+document.querySelectorAll('*').forEach(el => {
+  const style = getComputedStyle(el);
+  ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
+    const value = style[prop];
+    if (value.includes('oklab') || value.includes('oklch')) {
+      el.style[prop] = '#ffffff'; // fallback aman, bisa diganti sesuai tema
     }
-  } else {
-    console.warn('Elemen .info-text tidak ditemukan');
+  });
+});
+
+
+    const canvas = await html2canvas(infoTextEl, {
+      scale: 3, // HD quality
+      backgroundColor: '#0a0a23', // latar belakang sama seperti web
+      useCORS: true
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+
+    // Ukuran dan penempatan
+    const originalWidth = canvas.width;
+    const originalHeight = canvas.height;
+    const maxImgWidth = pageWidth - 2 * margin;
+    const maxImgHeight = pageHeight - y - margin;
+
+    const aspectRatio = originalHeight / originalWidth;
+    let imgWidth = maxImgWidth;
+    let imgHeight = imgWidth * aspectRatio;
+
+    if (imgHeight > maxImgHeight) {
+      imgHeight = maxImgHeight;
+      imgWidth = imgHeight / aspectRatio;
+    }
+
+    const xOffset = (pageWidth - imgWidth) / 2;
+    doc.addImage(imgData, 'PNG', xOffset, y, imgWidth, imgHeight);
+    y += imgHeight + sectionSpacing;
+  } catch (err) {
+    console.error('Gagal render #info-text:', err);
   }
+}
 
 
   doc.save('hasil_personal_matrix.pdf');
 });
+
 
 
 
