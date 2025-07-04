@@ -5,6 +5,7 @@ export default function ChakraTable() {
         <div className="absolute inset-0 bg-gray-900 z-0"></div>
 
         <div className="relative z-10 border border-gray-700 rounded-lg bg-gray-800/90 shadow-inner">
+        <div className="w-full overflow-x-auto">
           <table className="w-full table-auto border-collapse text-gray-100 text-sm md:text-base">
             <thead>
               <tr>
@@ -59,6 +60,7 @@ export default function ChakraTable() {
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>
