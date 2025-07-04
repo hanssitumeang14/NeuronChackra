@@ -30,10 +30,10 @@ export default function PersonalMatrix() {
               {/* Judul */}
               <div className="p-4 sm:p-6 md:px-20 lg:px-40">
                 <div className="personal-calculator bg-gradient-to-br from-slate-900 via-slate-800 to-gray-900 p-6 sm:p-8 rounded-2xl shadow-lg border border-slate-600 text-center">
-                  <p className="text-[#fcefb4] text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm">
-                    ✨ Temukan Nasibmu ✨
-                  </p>
-                </div>
+                 <p className="text-[#fcefb4] text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold tracking-wider font-[Cinzel] drop-shadow-sm text-center px-4">
+                  ✨ Temukan Nasibmu ✨
+                </p>
+               </div>
               </div>
 
               {/* Form */}
