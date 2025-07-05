@@ -1,6 +1,6 @@
 const inputFirstDate = document.getElementById("date_person1");
 const inputSecondDate = document.getElementById("date_person2");
-const inputFirstName = document.getElementById("name-partner1"); 
+const inputFirstName = document.getElementById("name-partner1");
 const inputSecondName = document.getElementById("name-partner2");
 const btnChart = document.getElementById('createChart');
 const compatibilityContainer = document.querySelector('.compatibility-container');
@@ -228,7 +228,7 @@ btnChart.addEventListener('click', (evt) => {
     const output2 = document.querySelector('.output2');
 
     errorOutput1.innerHTML = '';
-    
+
     const splitDateFirst = calculationDateFirst.split('-');
     const splitDateSecond = calculationDateSecond.split('-');
     const fullDateFirst = `${splitDateFirst[2]}.${splitDateFirst[1]}.${splitDateFirst[0]}`;
@@ -303,149 +303,141 @@ function clearInputs() {
     hideButton();
 }
 
-// ===== Tambahan fungsi download PDF =====
 btnDownloadPDF1.addEventListener('click', async () => {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    loading.style.display = 'block';
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        await generateCompatibilityPDF(doc);
+        doc.save('hasil_compatibility_matrix.pdf');
+    } catch (err) {
+        console.error("Gagal membuat PDF:", err);
+        alert("Terjadi kesalahan saat membuat PDF.");
+    } finally {
+        loading.style.display = 'none';
+    }
+});
 
-  const nama1 = titleCase(inputFirstName.value.trim());
-  const nama2 = titleCase(inputSecondName.value.trim());
-  const tanggal = document.querySelector('.output2')?.innerText || '';
+async function generateCompatibilityPDF(doc) {
+    const nama1 = titleCase(inputFirstName.value.trim());
+    const nama2 = titleCase(inputSecondName.value.trim());
+    const tanggal = document.querySelector('.output2')?.innerText || '';
 
-  const textColor = [0, 0, 0];
-  const purple = [75, 0, 130];
-  const grey = [220];
-  const white = [255, 255, 255];
+    const textColor = [0, 0, 0];
+    const purple = [75, 0, 130];
+    const grey = [220];
+    const margin = 20;
+    const sectionSpacing = 10;
 
-  const sectionSpacing = 8;
-  const margin = 20;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let y = margin;
 
-  let y = 20;
+    // Header
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(...purple);
+    doc.text("Hasil Compatibility Matrix", pageWidth / 2, y, null, null, "center");
 
-  // Judul
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
-  doc.setTextColor(...purple);
-  doc.text("Hasil Compatibility Matrix", pageWidth / 2, y, null, null, "center");
+    y += 7;
+    doc.setDrawColor(...purple);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, pageWidth - margin, y);
 
-  y += 7;
-  doc.setDrawColor(...purple);
-  doc.setLineWidth(0.5);
-  doc.line(margin, y, pageWidth - margin, y);
-  y += sectionSpacing;
+    y += sectionSpacing;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...textColor);
+    doc.text(`Hai! Ini hasil kecocokan antara ${nama1} dan ${nama2}:`, margin, y);
 
-  // Biodata
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.setTextColor(...textColor);
-  doc.text(`Hai! Ini hasil kecocokan antara ${nama1} dan ${nama2}:`, margin, y);
-  y += 5;
-  doc.text(tanggal, margin, y);
-  y += 5;
-  doc.setDrawColor(...grey);
-  doc.setLineWidth(0.1);
-  doc.line(margin, y, pageWidth - margin, y);
-  y += sectionSpacing;
+    y += 5;
+    doc.text(tanggal, margin, y);
 
-  // ---------------------------------------
-  // 1. Diagram SVG Compatibility
-  // ---------------------------------------
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(...purple);
-  doc.text("1. Diagram Kecocokan Kalian", margin, y);
-  y += 5;
+    y += 5;
+    doc.setDrawColor(...grey);
+    doc.setLineWidth(0.1);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += sectionSpacing;
 
-  const svgElement = document.querySelector(".compatibility-container svg");
-  if (svgElement && window.canvg) {
-    svgElement.querySelectorAll("*").forEach(el => {
-      const style = getComputedStyle(el);
-      if (style.fill && style.fill !== 'none') el.setAttribute('fill', style.fill);
-      if (style.stroke && style.stroke !== 'none') el.setAttribute('stroke', style.stroke);
+    // Blok warna oklab/oklch
+    document.querySelectorAll('*').forEach(el => {
+        const style = getComputedStyle(el);
+        ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
+            const val = style[prop];
+            if (val.includes('oklab') || val.includes('oklch')) el.style[prop] = '#ffffff';
+        });
     });
 
-    const svgString = new XMLSerializer().serializeToString(svgElement);
-    const canvas = document.createElement("canvas");
-    canvas.width = (svgElement.clientWidth || 500) * 2;
-    canvas.height = (svgElement.clientHeight || 500) * 2;
+    // Ambil elemen diagram dan info
+    const svgEl = document.querySelector(".compatibility-container")?.querySelector("svg");
+    const infoEl = document.querySelector("#info-text-compatibility");
+    if (!svgEl || !infoEl) return alert('Elemen diagram atau info tidak ditemukan');
 
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Clone wrapper container
+    const wrapper = document.createElement('div');
+    wrapper.style.width = '2000px';
+    wrapper.style.margin = '0 auto';
+    wrapper.style.background = '#0a0a23';
+    wrapper.style.color = '#fff';
+    wrapper.style.padding = '80px 120px';
+    wrapper.style.boxSizing = 'border-box';
+    wrapper.style.display = 'flex';
+    wrapper.style.flexDirection = 'column';
+    wrapper.style.gap = '60px';
 
-    const v = await window.canvg.Canvg.fromString(ctx, svgString);
-    await v.render();
+    // Clone diagram
+    const diagramWrapper = document.createElement('div');
+    const diagramClone = svgEl.cloneNode(true);
+    diagramWrapper.appendChild(diagramClone);
+    diagramWrapper.style.alignSelf = 'center';
+    diagramWrapper.style.marginBottom = '20px';
+    diagramWrapper.style.marginTop = '20px';
+    diagramWrapper.style.transform = 'scale(1.4)';
+    wrapper.appendChild(diagramWrapper);
 
-    const imgData = canvas.toDataURL("image/png");
-    const ratio = canvas.height / canvas.width;
-    let imgW = pageWidth - 2 * margin;
-    let imgH = imgW * ratio;
-    if (imgH > pageHeight - y - margin) {
-      imgH = pageHeight - y - margin;
-      imgW = imgH / ratio;
-    }
+    // Clone info
+    const infoClone = infoEl.cloneNode(true);
+    infoClone.style.fontSize = '1.3rem';
+    infoClone.querySelectorAll('*').forEach(child => {
+        child.style.fontSize = '1.3rem';
+    });
+    wrapper.appendChild(infoClone);
 
-    const xOffset = (pageWidth - imgW) / 2;
-    doc.addImage(imgData, "PNG", xOffset, y, imgW, imgH);
-    y += imgH + sectionSpacing;
-  }
-
-  // ---------------------------------------
-  // 2. Info Text Compatibility
-  // ---------------------------------------
-  const infoEl = document.querySelector("#info-text-compatibility");
-  if (infoEl) {
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.setTextColor(...purple);
-    if (y + 10 > pageHeight - margin) {
-  doc.addPage();  // Menambahkan halaman baru jika sudah mendekati batas
-  y = margin;  // Mengatur y kembali ke margin atas halaman baru
-}
-    doc.text("2. Penjelasan Detail Kecocokan", margin, y);
-    y += 5;
+    document.body.appendChild(wrapper);
 
     try {
-    document.querySelectorAll('*').forEach(el => {
-    const style = getComputedStyle(el);
-    ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
-        const value = style[prop];
-        if (value.includes('oklab') || value.includes('oklch')) {
-        el.style[prop] = '#ffffff'; // fallback aman, bisa diganti sesuai tema
+        const canvas = await html2canvas(wrapper, {
+            scale: 3,
+            backgroundColor: '#0a0a23',
+            useCORS: true
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        const originalWidth = canvas.width;
+        const originalHeight = canvas.height;
+
+        const maxImgWidth = pageWidth - 2 * margin;
+        const maxImgHeight = pageHeight - y - margin;
+        const aspectRatio = originalHeight / originalWidth;
+
+        let imgWidth = maxImgWidth;
+        let imgHeight = imgWidth * aspectRatio;
+
+        if (imgHeight > maxImgHeight) {
+            imgHeight = maxImgHeight;
+            imgWidth = imgHeight / aspectRatio;
         }
-    });
-    });
-    
-      const canvas = await html2canvas(infoEl, {
-        scale: 3,
-        backgroundColor: "#0a0a23",
-        useCORS: true
-      });
 
-      const imgData = canvas.toDataURL("image/png");
-      const ratio = canvas.height / canvas.width;
-      let imgW = pageWidth - 2 * margin;
-      let imgH = imgW * ratio;
-      if (imgH > pageHeight - y - margin) {
-        doc.addPage();
-        y = margin;
-      }
-      if (imgH > pageHeight - y - margin) {
-        imgH = pageHeight - y - margin;
-        imgW = imgH / ratio;
-      }
-
-      const xOffset = (pageWidth - imgW) / 2;
-      doc.addImage(imgData, "PNG", xOffset, y, imgW, imgH);
-      y += imgH + sectionSpacing;
+        const xOffset = (pageWidth - imgWidth) / 2;
+        doc.addImage(imgData, 'PNG', xOffset, y, imgWidth, imgHeight);
     } catch (err) {
-      console.error("Gagal render info-text-compatibility:", err);
+        console.error('Gagal render HTML ke Canvas:', err);
+    } finally {
+        document.body.removeChild(wrapper);
     }
-  }
+}
 
-  doc.save("hasil_compatibility_matrix.pdf");
-});
+
+
 
 

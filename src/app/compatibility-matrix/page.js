@@ -112,12 +112,17 @@ export default function CompatibilityMatrix() {
                         <div
                             className="output2 bg-[rgba(17,24,39,0.9)] mt-4 p-6 rounded-lg shadow-inner border border-[#374151] backdrop-blur-sm text-[#e5e7eb]"
                         ></div>
-
-                        <Compatibility />
-                         <div id="info-text-compatibility">
-                            <InfoTxtCompatibility/>
+                        <div
+                            id="matrix-compability"
+                            className="w-full max-w-4xl mx-auto flex justify-center items-center"
+                        >
+                            <Compatibility />
                         </div>
-                         <Information />
+
+                        <div id="info-text-compatibility">
+                            <InfoTxtCompatibility />
+                        </div>
+                        <Information />
 
                         <div className="flex flex-col items-center space-y-4">
                             <div className="flex flex-col items-center gap-6 mt-12 mb-16">
@@ -132,10 +137,20 @@ export default function CompatibilityMatrix() {
                                 </div>
                                 <button
                                     id="downloadPDF"
-                                    className="px-8 py-4 rounded-full text-lg font-semibold tracking-wide text-[#c7d2fe] bg-[#111827] border border-[#6366f1] backdrop-blur-md shadow-md hover:bg-[#3730a3] hover:shadow-xl transition-all duration-300 ease-in-out"
+                                    aria-busy="false"
+                                    className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-cyan-100 bg-[#2c2a5a] border border-white/20 backdrop-blur-md shadow-md hover:bg-[#3a396b] transition-all duration-300 ease-in-out"
                                 >
                                     ⬇️ Download PDF
                                 </button>
+
+                                <div
+                                    id="loading"
+                                    className="text-white mt-2 hidden text-base animate-pulse"
+                                    role="status"
+                                    aria-live="polite"
+                                >
+                                    ⏳ Sedang memproses PDF...
+                                </div>
                             </div>
                         </div>
                     </div>

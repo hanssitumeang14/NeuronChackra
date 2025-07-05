@@ -109,16 +109,20 @@ export default function PersonalMatrix() {
                       </p>
                     </div>
                     <div className="output-personal-date text-[#fff8db] mt-4 p-6 bg-gradient-to-br from-[#121428] via-[#1e1b4b] to-[#1e293b] rounded-2xl shadow-lg backdrop-blur-md border border-[#fff8db1a]" />
-
-                    <Personal />
+                    <div
+                      id="matrix-personal"
+                      className="w-full max-w-4xl mx-auto flex justify-center items-center"
+                    >
+                      <Personal />
+                    </div>
 
                     <div className="w-full flex flex-col lg:flex-row gap-10 mt-10 px-4">
                       <div className="w-full lg:w-1/2 overflow-x-auto">
                         <ChakraTable />
                       </div>
-                       <div id="info-text" className="w-full lg:w-1/2 flex-grow">
-                    <TextInfo />
-                  </div>
+                      <div id="info-text" className="w-full lg:w-1/2 flex-grow">
+                        <TextInfo />
+                      </div>
                     </div>
 
                     <div className="mt-14 w-full px-4 sm:px-6 md:px-12">
@@ -138,11 +142,20 @@ export default function PersonalMatrix() {
 
                       <button
                         id="downloadPDF"
+                        aria-busy="false"
                         className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-cyan-100 bg-[#2c2a5a] border border-white/20 backdrop-blur-md shadow-md hover:bg-[#3a396b] transition-all duration-300 ease-in-out"
                       >
                         ⬇️ Download PDF
                       </button>
-                    </div>
+
+                      <div
+                        id="loading"
+                        className="text-white mt-2 hidden text-base animate-pulse"
+                        role="status"
+                        aria-live="polite"
+                      >
+                        ⏳ Sedang memproses PDF...
+                      </div></div>
                   </div>
                 </div>
               </div>

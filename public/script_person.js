@@ -66,7 +66,7 @@ function hideButton() {
 function validateName(name) {
   /* name validation. Name can contain only letters, dash, or be written with space (if multiple names) */
   const nameValide = new RegExp("^[а-яё\\- ]*[a-z\\- ]*$", "i");
-  
+
   if (!nameValide.test(name)) {
     return `<p>Name format is incorrect: allowed characters are letters, dash and space. Example: Anna, Anna-Maria, Anna Maria.</p>`;
   }
@@ -75,8 +75,8 @@ function validateName(name) {
 
 function validateDate(date) {
   let errorMessage = '';
-  
-  if(date === 'Invalid Date' || isNaN(date.getFullYear())){
+
+  if (date === 'Invalid Date' || isNaN(date.getFullYear())) {
     errorMessage += `<p>Date is not valid.</p>`;
   }
 
@@ -124,7 +124,7 @@ btnAnswer.addEventListener('click', (evt) => {
   output.innerHTML = titleCase(name) + ' ' + '<span>dengan Tanggal Lahir:</span>' + ' ' + fullDate;
 
   container.style.display = 'flex';
-  container.scrollIntoView({behavior: "smooth"});
+  container.scrollIntoView({ behavior: "smooth" });
   let apoint = reduceNumber(+splitDate[2]); // day of birth
   let year = +splitDate[0]; //year of birth
   let bpoint = +splitDate[1]; // month of birth
@@ -143,7 +143,7 @@ function valide(date, name) {
   let errorMessage = '';
   const nameValide = new RegExp("^[а-яё\\- ]*[a-z\\- ]*$", "i");
 
-  if(date === 'Invalid Date'){
+  if (date === 'Invalid Date') {
     console.log('invalid date');
   }
 
@@ -177,28 +177,35 @@ dateInput.addEventListener('input', checkAllValid);
 genderInputs.forEach(input => input.addEventListener('change', checkAllValid));
 
 btnDownloadPDF.addEventListener('click', async () => {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  loading.style.display = 'block';
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    await generatePDF(doc);
+    doc.save('hasil_personal_matrix.pdf');
+  } catch (err) {
+    console.error('Gagal membuat PDF:', err);
+    alert('Terjadi kesalahan saat membuat PDF.');
+  } finally {
+    loading.style.display = 'none';
+  }
+});
 
-  const nama = titleCase(nameInput.value.trim());
+async function generatePDF(doc) {
   const tanggal = document.querySelector('.output-personal-date')?.innerText || '';
-
   const textColor = [0, 0, 0];
   const purple = [75, 0, 130];
   const grey = [220];
-
-  const titleFontSize = 18;
-  const sectionSpacing = 8;
   const margin = 20;
+  const sectionSpacing = 10;
 
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
+  let y = margin;
 
-  let y = 20;
-
-  // Title
+  // Header
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(titleFontSize);
+  doc.setFontSize(18);
   doc.setTextColor(...purple);
   doc.text('Hasil Personal Matrix', pageWidth / 2, y, null, null, 'center');
 
@@ -208,153 +215,100 @@ btnDownloadPDF.addEventListener('click', async () => {
   doc.line(margin, y, pageWidth - margin, y);
 
   y += sectionSpacing;
-
-  // Biodata
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...textColor);
   doc.text(`Halo: ${tanggal}`, margin, y);
 
   y += 5;
-  doc.setLineWidth(0.1);
   doc.setDrawColor(...grey);
+  doc.setLineWidth(0.1);
   doc.line(margin, y, pageWidth - margin, y);
-
   y += sectionSpacing;
 
+  // Element references
   const container = document.querySelector('.matrix-wrapper');
-  if (!container) {
-    alert('Elemen .matrix-wrapper tidak ditemukan');
-    return;
-  }
+  if (!container) return alert('Elemen .matrix-wrapper tidak ditemukan');
 
-  // Diagram SVG
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  doc.setTextColor(...purple);
-  doc.text(`1. Hasil Diagram Kamu:`, margin, y);
-  y += 5;
+  const matrixEl = container.querySelector('#matrix-personal');
+  const tableEl = container.querySelector('#chakra_table');
+  const infoEl = container.querySelector('#info-text');
+  if (!matrixEl || !tableEl || !infoEl) return alert('Beberapa elemen tidak lengkap untuk PDF');
 
-  const svgElement = container.querySelector('svg');
-  if (svgElement && window.canvg) {
-    // Force copy inline styles (fill/stroke)
-    svgElement.querySelectorAll('*').forEach(el => {
-      const computedStyle = window.getComputedStyle(el);
-      const fill = computedStyle.fill;
-      const stroke = computedStyle.stroke;
-      if (fill && fill !== 'none') el.setAttribute('fill', fill);
-      if (stroke && stroke !== 'none') el.setAttribute('stroke', stroke);
+  // Atasi warna oklab
+  document.querySelectorAll('*').forEach(el => {
+    const style = getComputedStyle(el);
+    ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
+      const val = style[prop];
+      if (val.includes('oklab') || val.includes('oklch')) el.style[prop] = '#ffffff';
     });
-
-    const svgString = new XMLSerializer().serializeToString(svgElement);
-    const canvas = document.createElement('canvas');
-    const originalWidth = svgElement.clientWidth || 500;
-    const originalHeight = svgElement.clientHeight || 500;
-    canvas.width = originalWidth * 2; // Higher resolution
-    canvas.height = originalHeight * 2;
-
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#fff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    try {
-      const v = await window.canvg.Canvg.fromString(ctx, svgString);
-      await v.render();
-
-      const imgData = canvas.toDataURL('image/png');
-
-      const aspectRatio = canvas.height / canvas.width;
-
-      const maxScale = 1.2;
-      const maxImgWidth = (pageWidth - 2 * margin) * maxScale;
-      const maxImgHeight = (pageHeight - y - margin) * maxScale;
-
-      let imgWidth = maxImgWidth;
-      let imgHeight = imgWidth * aspectRatio;
-
-      if (imgHeight > maxImgHeight) {
-        imgHeight = maxImgHeight;
-        imgWidth = imgHeight / aspectRatio;
-      }
-
-      const xOffset = (pageWidth - imgWidth) / 2;
-      doc.addImage(imgData, 'PNG', xOffset, y, imgWidth, imgHeight);
-      y += imgHeight + sectionSpacing;
-    } catch (error) {
-      console.error('Error rendering SVG:', error);
-    }
-  }
-
-  // Chakra Table
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  doc.setTextColor(...purple);
-  if (y + 10 > pageHeight - margin) {
-  doc.addPage();  
-  y = margin;  
-}
-  doc.text(`2. Table Personal Kamu:`, margin, y);
-  y += 5;
-
-  const table = container.querySelector('#chakra_table table');
-  if (table) {
-    doc.autoTable({
-      html: table,
-      startY: y,
-      styles: {
-        font: 'helvetica',
-        fontSize: 10,
-        textColor: textColor,
-      },
-      headStyles: {
-        fillColor: purple,
-        textColor: [255, 255, 255],
-      },
-      theme: 'grid',
-      margin: { left: margin, right: margin },
-    });
-
-    y = doc.lastAutoTable.finalY + sectionSpacing;
-  }
-  
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  doc.setTextColor(...purple);
-  doc.addPage();  
-  y = margin;  
-  doc.text(`3. Penjelasan Detail:`, margin, y);
-  y += 5;
-
- const infoTextEl = container.querySelector('#info-text');
-if (infoTextEl) {
-  try {
-
-document.querySelectorAll('*').forEach(el => {
-  const style = getComputedStyle(el);
-  ['color', 'backgroundColor', 'borderColor'].forEach(prop => {
-    const value = style[prop];
-    if (value.includes('oklab') || value.includes('oklch')) {
-      el.style[prop] = '#ffffff'; 
-    }
   });
-});
 
+  // Wrapper utama
+  const wrapper = document.createElement('div');
+  wrapper.style.width = '2000px'; // 💥 Lebih lebar
+  wrapper.style.margin = '0 auto';
+  wrapper.style.background = '#0a0a23';
+  wrapper.style.color = '#fff';
+  wrapper.style.padding = '80px 120px';
+  wrapper.style.boxSizing = 'border-box';
+  wrapper.style.display = 'flex';
+  wrapper.style.flexDirection = 'column';
+  wrapper.style.gap = '80px';
 
-    const canvas = await html2canvas(infoTextEl, {
-      scale: 3, 
-      backgroundColor: '#0a0a23', 
+  // Top row (matrix + info)
+  const topRow = document.createElement('div');
+  topRow.style.display = 'grid';
+  topRow.style.gridTemplateColumns = '65% 35%';
+  topRow.style.gap = '10px';
+  topRow.style.alignItems = 'flex-start';
+
+  const matrixClone = matrixEl.cloneNode(true);
+  matrixClone.style.width = '100%';
+  matrixClone.style.marginTop = '40px';
+  matrixClone.style.transform = 'scale(1.3)';
+
+  const infoClone = infoEl.cloneNode(true);
+  infoClone.style.width = '100%';
+  matrixClone.style.marginRight = '10x';
+  infoClone.style.fontSize = '2.4rem';
+
+  topRow.appendChild(matrixClone);
+  topRow.appendChild(infoClone);
+
+  // Tabel chakra (dibesarkan)
+  const tableClone = tableEl.cloneNode(true);
+  tableClone.style.width = '100%';
+  tableClone.style.fontSize = '2.4rem';
+  tableClone.style.padding = '30px';
+  tableClone.style.marginTop = '60px';
+
+  // Tambahkan padding ke semua sel tabel
+  tableClone.querySelectorAll('th, td').forEach(cell => {
+    cell.style.padding = '18px 30px';
+    cell.style.fontSize = '2.4rem';
+  });
+
+  // Gabung ke wrapper
+  wrapper.appendChild(topRow);
+  wrapper.appendChild(tableClone);
+  document.body.appendChild(wrapper);
+
+  try {
+    const canvas = await html2canvas(wrapper, {
+      scale: 3,
+      backgroundColor: '#0a0a23',
       useCORS: true
     });
 
     const imgData = canvas.toDataURL('image/png');
-
-    // Ukuran dan penempatan
     const originalWidth = canvas.width;
     const originalHeight = canvas.height;
+
     const maxImgWidth = pageWidth - 2 * margin;
     const maxImgHeight = pageHeight - y - margin;
-
     const aspectRatio = originalHeight / originalWidth;
+
     let imgWidth = maxImgWidth;
     let imgHeight = imgWidth * aspectRatio;
 
@@ -364,16 +318,13 @@ document.querySelectorAll('*').forEach(el => {
     }
 
     const xOffset = (pageWidth - imgWidth) / 2;
-doc.addImage(imgData, 'PNG', margin, y, 100, 170);
-    y += imgHeight + sectionSpacing;
+    doc.addImage(imgData, 'PNG', xOffset, y, imgWidth, imgHeight);
   } catch (err) {
-    console.error('Gagal render #info-text:', err);
+    console.error('Gagal render HTML ke Canvas:', err);
+  } finally {
+    document.body.removeChild(wrapper);
   }
 }
-
-
-  doc.save('hasil_personal_matrix.pdf');
-});
 
 
 
