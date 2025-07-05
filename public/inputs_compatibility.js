@@ -406,8 +406,10 @@ async function generateCompatibilityPDF(doc) {
     document.body.appendChild(wrapper);
 
     try {
+        await new Promise((resolve) => setTimeout(resolve, 500)); // beri delay agar style dan render DOM stabil
+
         const canvas = await html2canvas(wrapper, {
-            scale: 3,
+            scale: 1.5,
             backgroundColor: '#0a0a23',
             useCORS: true
         });
