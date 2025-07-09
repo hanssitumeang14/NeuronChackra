@@ -129,7 +129,7 @@ export default function CompatibilityMatrix() {
                                 <div className="relative group">
                                     <div className="absolute inset-0 bg-gradient-to-br from-[#4f46e5] via-[#7c3aed] to-[#4338ca] opacity-10 rounded-full animate-pulse group-hover:opacity-20 transition"></div>
                                     <button
-                                        id="showPDF"
+                                        id="buttonWa1"
                                         className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold tracking-wide bg-[#4338ca] text-[#f3f4f6] shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out"
                                     >
                                         Bingung bacanya gimana?

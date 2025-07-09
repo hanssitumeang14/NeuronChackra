@@ -133,7 +133,7 @@ export default function PersonalMatrix() {
                       <div className="relative group">
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-fuchsia-400 to-purple-500 opacity-10 blur-xl rounded-full animate-pulse group-hover:opacity-20 transition" />
                         <button
-                          id="decode-matrix-btn"
+                          id="buttonWa"
                           className="relative z-10 px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide bg-gradient-to-br from-[#5e5fcf] via-[#6f88d2] to-[#4361ee] text-yellow-100 shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
                         >
                           ✨ Bingung bacanya gimana?

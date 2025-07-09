@@ -439,6 +439,16 @@ async function generateCompatibilityPDF(doc) {
     }
 }
 
+const buttonWa1 = document.getElementById('buttonWa1');
+if (buttonWa1) {
+  buttonWa.addEventListener('click', () => {
+    const phone = '6287861517165';
+    const message = encodeURIComponent('Maaf saya bingung bacanya, mohon penjelasannya yaa.. Terimakasih');
+    const waLink = `https://wa.me/${phone}?text=${message}`;
+    window.open(waLink, '_blank');
+  });
+}
+
 
 
 
