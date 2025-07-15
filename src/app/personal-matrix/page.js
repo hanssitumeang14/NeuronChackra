@@ -117,11 +117,11 @@ export default function PersonalMatrix() {
                     </div>
 
                     <div className="w-full flex flex-col lg:flex-row gap-10 mt-10 px-4">
-                      <div className="w-full lg:w-1/2 overflow-x-auto">
-                        <ChakraTable />
-                      </div>
                       <div id="info-text" className="w-full lg:w-1/2 flex-grow">
                         <TextInfo />
+                      </div>
+                      <div className="w-full lg:w-1/2 overflow-x-auto">
+                        <ChakraTable />
                       </div>
                     </div>
 
@@ -155,7 +155,8 @@ export default function PersonalMatrix() {
                         aria-live="polite"
                       >
                         ⏳ Sedang memproses PDF...
-                      </div></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

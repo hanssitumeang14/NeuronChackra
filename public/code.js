@@ -122,7 +122,9 @@ function Purposes() {
   const malelinepoint2 = document.querySelector("#malelinepoint2");
   malelinepoint2.textContent = getMaleLine().epoint;
   const malelinepoint3 = document.querySelector("#malelinepoint3");
-  malelinepoint3.textContent = getMaleLine().ipoint;
+  malelinepoint3.textContent = reduceNumber(
+    getMaleLine().fpoint + getMaleLine().epoint
+  );
 
   //female line point
   const femalelinepoint = document.querySelector("#femalelinepoint1");
@@ -130,7 +132,9 @@ function Purposes() {
   const femalelinepoint2 = document.querySelector("#femalelinepoint2");
   femalelinepoint2.textContent = getFemaleLine().epoint;
   const femalelinepoint3 = document.querySelector("#femalelinepoint3");
-  femalelinepoint3.textContent = getFemaleLine().hpoint;
+  femalelinepoint3.textContent = reduceNumber(
+    getFemaleLine().gpoint + getFemaleLine().epoint
+  );
 
   // Personal purpose
   const sky = document.querySelector("#skypoint");
