@@ -1,6 +1,6 @@
 export default function ChakraTable() {
   return (
-    <div id="chakra_table" className="w-full flex justify-center items-center my-16 px-4">
+    <div id="chakra_table" className="w-full flex justify-center items-center mb-16 px-4">
       <div className="relative w-full max-w-5xl rounded-lg overflow-hidden shadow-md">
         <div className="absolute inset-0 z-0" style={{ backgroundColor: '#111827' }}></div>
 

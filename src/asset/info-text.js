@@ -21,26 +21,6 @@ export default function TextInfo() {
         `}
       </style>
 
-      {/* Leluhur */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 bg-[#0e0c24] border border-[#3730a3] rounded-xl shadow-lg backdrop-blur-md p-4 sm:p-6">
-        <div className="text-center space-y-3 sm:space-y-4">
-          <h3 className="font-cinzel text-lg sm:text-xl lg:text-2xl text-[#ffd700] tracking-wider">Garis Leluhur (Pria)</h3>
-          <div className="flex justify-center gap-3 sm:gap-4">
-            <span id="malelinepoint1" className="base-circle">18</span>
-            <span id="malelinepoint2" className="base-circle">18</span>
-            <span id="malelinepoint3" className="base-circle">18</span>
-          </div>
-        </div>
-        <div className="text-center space-y-3 sm:space-y-4">
-          <h3 className="font-cinzel text-lg sm:text-xl lg:text-2xl text-[#ff00cc] tracking-wider">Garis Leluhur (Wanita)</h3>
-          <div className="flex justify-center gap-3 sm:gap-4">
-            <span id="femalelinepoint1" className="base-circle">18</span>
-            <span id="femalelinepoint2" className="base-circle">18</span>
-            <span id="femalelinepoint3" className="base-circle">18</span>
-          </div>
-        </div>
-      </div>
-
       {/* Tujuan Personal */}
       <div className="flex flex-col gap-4 sm:gap-6">
         <div className="bg-[#0f0c2d] border border-[#6b21a8] rounded-xl p-4 sm:p-6 shadow-md backdrop-blur">
