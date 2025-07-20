@@ -144,9 +144,7 @@ btnAnswer.addEventListener('click', (evt) => {
   years: person.years
   };
   
-  window.latestDataParam = {
-    points: person.points,
-  };
+  window.latestDataParam = dataParam
 
 
   Points(person);
