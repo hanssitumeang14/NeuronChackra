@@ -248,6 +248,25 @@ btnChart.addEventListener('click', (evt) => {
     let secondCpoint = calculateYear(year2);
     createPerson(orangKedua, secondApoint, secondBpoint, secondCpoint);
 
+     // Tambahkan dataParam di sini
+  window.dataParam = {
+    person1: {
+      name: inputFirstName.value.trim(),
+      birthdate: fullDateFirst,
+      apoint: apoint,
+      bpoint: bpoint,
+      cpoint: cpoint,
+    },
+    person2: {
+      name: inputSecondName.value.trim(),
+      birthdate: fullDateSecond,
+      apoint: secondApoint,
+      bpoint: secondBpoint,
+      cpoint: secondCpoint,
+    },
+    message: '', // bisa diisi kemudian saat kirim pertanyaan
+  };
+
     fillMatrix(orang, orangKedua);
     compatibilityContainer.style.display = 'flex';
     compatibilityContainer.scrollIntoView({ behavior: "smooth" });

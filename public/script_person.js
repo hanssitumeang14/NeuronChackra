@@ -113,6 +113,8 @@ btnAnswer.addEventListener('click', (evt) => {
   const calculationDate = document.getElementById('date').value;
   const name = document.getElementById('name').value;
   const output = document.querySelector('.output-personal-date');
+  const gender = document.querySelector('input[name="gender"]:checked')?.value || '';
+
 
   output.innerHTML = '';
   errorOutput.innerHTML = '';
@@ -131,6 +133,22 @@ btnAnswer.addEventListener('click', (evt) => {
   let cpoint = calculateYear(year); // c - year of birth
 
   createPerson(person, apoint, bpoint, cpoint);
+
+  const dataParam = {
+  name,
+  gender,
+  date: fullDate,
+  points: person.points,
+  chartHeart: person.chartHeart,
+  purposes: person.purposes,
+  years: person.years
+  };
+  
+  window.latestDataParam = {
+    points: person.points,
+  };
+
+
   Points(person);
   ChartHeart();
   Purposes();

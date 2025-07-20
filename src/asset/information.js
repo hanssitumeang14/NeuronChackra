@@ -1,83 +1,122 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function Information() {
+  const [contents, setContents] = useState({});
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const sendToServerWithMessage = async (message, idx) => {
+    const data = window.dataParam;
+
+    if (!data || !data.person1 || !data.person2) {
+      alert("Silakan klik tombol Generate dulu.");
+      return;
+    }
+
+    // Toggle accordion
+    if (openIndex === idx) {
+      setOpenIndex(null);
+      return;
+    }
+
+    try {
+      // Dummy response
+      const dummyAnswer = `🧠 Jawaban dummy untuk:\n\n"${message}"\n\n(Sementara karena backend belum aktif)`;
+
+      setContents(prev => ({
+        ...prev,
+        [idx]: dummyAnswer,
+      }));
+
+      setOpenIndex(idx);
+    } catch (err) {
+      console.error(err);
+      alert("Gagal mengambil jawaban dari server.");
+    }
+  };
+
+//   const sendToServerWithMessage = async (message, idx) => {
+//   const data = window.dataParam;
+
+//   if (!data || !data.points) {
+//     alert("Silakan klik tombol Generate dulu.");
+//     return;
+//   }
+
+//   // Toggle accordion
+//   if (openIndex === idx) {
+//     setOpenIndex(null);
+//     return;
+//   }
+
+//   try {
+//     const response = await fetch('https://mu67a3hmpg.ap-southeast-1.awsapprunner.com/ask/', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         ...data,
+//         message,
+//         thread_id: 'personal-matrix',
+//       }),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error(`HTTP ${response.status}`);
+//     }
+
+//     const result = await response.json();
+
+//     setContents(prev => ({
+//       ...prev,
+//       [idx]: result?.answer || 'Tidak ada jawaban dari server',
+//     }));
+
+//     setOpenIndex(idx);
+//   } catch (err) {
+//     console.error(err);
+//     alert("Gagal mengambil jawaban dari server.");
+//   }
+// };
+
+
+  const questions = [
+    'Melihat destiny matrix saya, Apa kelebihan dari diri saya?',
+    'Melihat destiny matrix saya, Apa kelemahan dari diri saya?',
+    'Melihat destiny matrix saya, apa hal yang ada di masa lalu saya yang perlu saya perbaiki untuk masa depan?',
+    'Dengan mencocokkan destiny matrix, apa karir yang cocok untuk saya?',
+    'Bagaimana kriteria yang cocok untuk saya dalam memilih pasangan hidup dengan melihat destiny matrix saya?',
+  ];
+
   return (
     <div
       className="flex items-center justify-center rounded-2xl py-10 px-5"
-      style={{
-        background: 'linear-gradient(to bottom, #111827, #1f2937, #111827)',
-      }}
+      style={{ background: 'linear-gradient(to bottom, #111827, #1f2937, #111827)' }}
     >
-      <div id="accordion-collapse" data-accordion="collapse" className="w-full max-w-3xl">
-        <h1 className="text-4xl font-cinzel text-center mb-10" style={{ color: '#60a5fa' }}>
-          Penjelasan
-        </h1>
-        {[
-          {
-            title: 'Kelebihan Diri & Warisan Leluhur',
-            content: [
-              'Flowbite is an open-source library of interactive components built on top of Tailwind CSS including buttons, dropdowns, modals, navbars, and more.',
-              'Check out this guide to learn how to get started and start developing websites even faster with components on top of Tailwind CSS.',
-            ],
-          },
-          {
-            title: 'Kelemahan Diri & Tugas dari Leluhur',
-            content: [
-              'Flowbite is first conceptualized and designed using the Figma software so everything you see in the library has a design equivalent in our Figma file.',
-              'Check out the Figma design system based on the utility classes from Tailwind CSS and components from Flowbite.',
-            ],
-          },
-          {
-            title: 'Catatan Masa Lalu dan Forecast Masa Depan',
-            content: [
-              'The main difference is that the core components from Flowbite are open source under the MIT license, whereas Tailwind UI is a paid product.',
-              'Another difference is that Flowbite relies on smaller and standalone components, whereas Tailwind UI offers sections of pages.',
-            ],
-          },
-          {
-            title: 'Karir Ideal',
-            content: [
-              'Flowbite is first conceptualized and designed using the Figma software so everything you see in the library has a design equivalent in our Figma file.',
-              'Check out the Figma design system based on the utility classes from Tailwind CSS and components from Flowbite.',
-            ],
-          },
-          {
-            title: 'Pasangan Ideal',
-            content: [
-              'Flowbite is first conceptualized and designed using the Figma software so everything you see in the library has a design equivalent in our Figma file.',
-              'Check out the Figma design system based on the utility classes from Tailwind CSS and components from Flowbite.',
-            ],
-          },
-        ].map((section, idx) => {
-          const id = `accordion-collapse-body-${idx + 1}`;
-          const headingId = `accordion-collapse-heading-${idx + 1}`;
+      <div className="w-full max-w-3xl">
+        <h1 className="text-4xl font-cinzel text-center mb-10 text-blue-400">Penjelasan</h1>
+
+        {questions.map((title, idx) => {
+          const isOpen = openIndex === idx;
+
           return (
             <div
               key={idx}
-              className="mb-5 rounded-xl shadow-md backdrop-blur-sm"
-              style={{
-                border: '1px solid #374151',
-                backgroundColor: 'rgba(31, 41, 55, 0.9)',
-              }}
+              className="mb-5 rounded-xl shadow-md backdrop-blur-sm border border-gray-700 bg-gray-800/90"
             >
-              <h2 id={headingId}>
-                <button
-                  type="button"
-                  className="flex items-center justify-between w-full p-5 font-semibold focus:outline-none transition duration-300 ease-in-out rounded-t-xl"
-                  style={{
-                    borderBottom: '1px solid #374151',
-                    color: '#93c5fd',
-                    backgroundColor: 'transparent',
-                  }}
-                  data-accordion-target={`#${id}`}
-                  aria-expanded="false"
-                  aria-controls={id}
-                >
-                  <span className="text-lg font-medium" style={{ color: '#60a5fa' }}>
-                    {section.title}
-                  </span>
+              <button
+                type="button"
+                onClick={() => sendToServerWithMessage(title, idx)}
+                className="flex items-center w-full px-5 py-4 text-left font-semibold rounded-t-xl focus:outline-none transition duration-300 ease-in-out"
+                aria-expanded={isOpen}
+              >
+                <span className="text-base sm:text-lg text-blue-300 flex-grow">{title}</span>
+                <div className="ml-4 flex-shrink-0 w-6 h-6">
                   <svg
-                    data-accordion-icon
-                    className="w-4 h-4 shrink-0 transform transition-transform ease-in-out duration-200"
-                    style={{ color: '#60a5fa' }}
+                    className={`w-6 h-6 transform transition-transform text-blue-400 ${isOpen ? 'rotate-180' : ''
+                      }`}
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 10 6"
@@ -87,51 +126,22 @@ export default function Information() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M9 5 5 1 1 5"
+                      d="M1 1 5 5 9 1"
                     />
                   </svg>
-                </button>
-              </h2>
-              <div id={id} className="hidden" aria-labelledby={headingId}>
-                <div
-                  className="p-5 rounded-b-xl"
-                  style={{ backgroundColor: '#111827', borderTop: '1px solid #374151' }}
-                >
-                  {section.content.map((para, pi) => (
-                    <p
-                      key={pi}
-                      className="text-sm leading-relaxed"
-                      style={{
-                        marginBottom: pi === 0 ? '0.75rem' : '0',
-                        color: '#d1d5db',
-                      }}
-                    >
-                      {para.includes('http') ? (
-                        <>
-                          {para.split(' ').map((word, wi) =>
-                            word.startsWith('http') ? (
-                              <a
-                                key={wi}
-                                href={word}
-                                className="hover:underline"
-                                style={{ color: '#60a5fa' }}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {word}
-                              </a>
-                            ) : (
-                              ` ${word}`
-                            )
-                          )}
-                        </>
-                      ) : (
-                        para
-                      )}
-                    </p>
-                  ))}
                 </div>
-              </div>
+              </button>
+
+
+              {isOpen && (
+                <div
+                  className="p-5 rounded-b-xl border-t border-gray-700 bg-gray-900"
+                >
+                  <p className="text-sm leading-relaxed text-gray-300 whitespace-pre-line">
+                    {contents[idx] || 'Silakan klik untuk mendapatkan jawaban...'}
+                  </p>
+                </div>
+              )}
             </div>
           );
         })}
