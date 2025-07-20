@@ -51,7 +51,7 @@ export default function Information1() {
   }
 
   try {
-    const response = await fetch('https://mu67a3hmpg.ap-southeast-1.awsapprunner.com/ask/', {
+    const response = await fetch('https://mu67a3hmpg.ap-southeast-1.awsapprunner.com/ask', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
