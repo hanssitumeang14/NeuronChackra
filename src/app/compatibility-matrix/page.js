@@ -138,7 +138,7 @@ export default function CompatibilityMatrix() {
                                 <button
                                     id="downloadPDF"
                                     aria-busy="false"
-                                    className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-cyan-100 bg-[#2c2a5a] border border-white/20 backdrop-blur-md shadow-md hover:bg-[#3a396b] transition-all duration-300 ease-in-out"
+                                    className="px-8 py-4 rounded-full text-lg font-semibold font-cosmic tracking-wide text-[#67e8f9] bg-[#2c2a5a] border border-[#ffffff33] backdrop-blur-md shadow-md hover:bg-[#3a396b] transition-all duration-300 ease-in-out"
                                 >
                                     ⬇️ Download PDF
                                 </button>

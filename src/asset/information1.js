@@ -51,7 +51,6 @@ const sendToServerWithMessage = async (message, idx) => {
   }
 };
 
-
   const questions = [
     'Melihat destiny matrix saya, Apa kelebihan dari diri saya?',
     'Melihat destiny matrix saya, Apa kelemahan dari diri saya?',
@@ -61,12 +60,9 @@ const sendToServerWithMessage = async (message, idx) => {
   ];
 
   return (
-    <div
-      className="flex items-center justify-center rounded-2xl py-10 px-5"
-      style={{ background: 'linear-gradient(to bottom, #111827, #1f2937, #111827)' }}
-    >
+    <div className="flex items-center justify-center rounded-2xl py-10 px-5 bg-[#111827]">
       <div className="w-full max-w-3xl">
-        <h1 className="text-4xl font-cinzel text-center mb-10 text-blue-400">Penjelasan</h1>
+        <h1 className="text-4xl font-cinzel text-center mb-10 text-[#60a5fa]">Penjelasan</h1>
 
         {questions.map((title, idx) => {
           const isOpen = openIndex === idx;
@@ -75,7 +71,7 @@ const sendToServerWithMessage = async (message, idx) => {
           return (
             <div
               key={idx}
-              className="mb-5 rounded-xl shadow-md backdrop-blur-sm border border-gray-700 bg-gray-800/90"
+              className="mb-5 rounded-xl shadow-md backdrop-blur-sm border border-[#374151] bg-[#1f2937]"
             >
               <button
                 type="button"
@@ -84,20 +80,22 @@ const sendToServerWithMessage = async (message, idx) => {
                 aria-expanded={isOpen}
                 disabled={isLoading}
               >
-                <span className="text-base sm:text-lg text-blue-300 flex-grow">
+                <span className="text-base sm:text-lg text-[#93c5fd] flex-grow">
                   {title}
                 </span>
                 <div className="ml-4 w-6 h-6 flex items-center justify-center">
                   {isLoading ? (
                     <svg
-                      className="w-5 h-5 text-blue-400 animate-spin"
+                      className="w-5 h-5 text-[#60a5fa] animate-spin"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
                       <circle
                         className="opacity-25"
-                        cx="12" cy="12" r="10"
+                        cx="12"
+                        cy="12"
+                        r="10"
                         stroke="currentColor"
                         strokeWidth="4"
                       />
@@ -109,7 +107,7 @@ const sendToServerWithMessage = async (message, idx) => {
                     </svg>
                   ) : (
                     <svg
-                      className={`w-6 h-6 transform transition-transform text-blue-400 ${isOpen ? 'rotate-180' : ''}`}
+                      className={`w-6 h-6 transform transition-transform text-[#60a5fa] ${isOpen ? 'rotate-180' : ''}`}
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 10 6"
@@ -124,12 +122,11 @@ const sendToServerWithMessage = async (message, idx) => {
                     </svg>
                   )}
                 </div>
-
               </button>
 
               {isOpen && (
-                <div className="p-5 rounded-b-xl border-t border-gray-700 bg-gray-900">
-                  <p className="text-sm leading-relaxed text-gray-300 whitespace-pre-line">
+                <div className="p-5 rounded-b-xl border-t border-[#374151] bg-[#0f172a]">
+                  <p className="text-sm leading-relaxed text-[#d1d5db] whitespace-pre-line">
                     {contents[idx] || 'Silakan refresh untuk mendapatkan jawaban...'}
                   </p>
                 </div>
