@@ -92,6 +92,7 @@ export default function PersonalMatrix() {
                   <button
                     id="get_the_answer"
                     className="bg-gradient-to-r from-[#7e74d9] to-[#5dbde0] hover:from-[#6c63ff] hover:to-[#38bdf8] text-white font-semibold px-10 py-4 rounded-2xl transition shadow-md text-base md:text-lg"
+                    style={{ display: "none" }}
                   >
                     Buat Hitungan
                   </button>
