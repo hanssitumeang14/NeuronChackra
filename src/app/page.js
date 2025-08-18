@@ -18,15 +18,13 @@ export default function Home() {
         </Link>
 
         <Link
-          href="/compatibility-matrix"
-          className="relative border-2 border-cyan-600 text-cyan-600 px-8 py-3 rounded-lg font-semibold
-                     hover:bg-cyan-600 hover:text-black transition
-                     before:absolute before:-inset-1 before:rounded-lg before:bg-cyan-600 before:opacity-25 before:blur-lg before:animate-glow
-                     after:absolute after:-inset-2 after:rounded-lg after:bg-cyan-600 after:opacity-10 after:blur-2xl after:animate-glow-slower
-                     z-10
+          href="/"
+          className="relative border-2 border-cyan-600 text-cyan-600 px-8 py-3 rounded-lg font-semibold disabled:opacity-50
+                     
+                     absolute before:-inset-1 before:rounded-lg before:bg-cyan-600 before:opacity-10 before:blur-lg before:animate-glow
                      focus:outline-none focus:ring-2 focus:ring-cyan-600 focus:ring-offset-2"
         >
-          Compatibility Matrix
+          Compatibility Matrix (Coming soon!)
         </Link>
       </div>
 

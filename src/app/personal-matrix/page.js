@@ -3,6 +3,7 @@ import ChakraTable from "@/asset/chakra-table";
 import Information1 from "@/asset/information1";
 import TextInfo from "@/asset/info-text";
 import Script from "next/script";
+import TestimonialCarousel from "../components/TestimonialCarousel";
 
 export const metadata = {
   title: "Personal Matrix",
@@ -183,9 +184,17 @@ export default function PersonalMatrix() {
             </div>
           </div>
         </div>
+       <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-[Cinzel] text-center tracking-wide text-[#d1d5db] drop-shadow-sm">
+                                    💫 Testimoni 💫
+                </p>
+                 <p className="text-lg text-center font-medium text-[#e5e7eb] mb-6">
+                            Lihat kata-kata mereka tentang pengalaman menggunakan jasa full reading kalkulator ini:
+                        </p>
+                <TestimonialCarousel />
       </div>
 
       <Script src="/script_person.js" strategy="lazyOnload" />
+      
     </>
   );
 }

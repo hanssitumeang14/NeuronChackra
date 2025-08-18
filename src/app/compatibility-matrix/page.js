@@ -2,6 +2,7 @@ import Information from "@/asset/information";
 import Compatibility from "@/asset/svg-compatibility";
 import InfoTxtCompatibility from "@/asset/info-txt-compatibility";
 import Script from "next/script";
+import TestimonialCarousel from "../components/TestimonialCarousel";
 
 export const metadata = {
     title: "Compatibility Matrix",
@@ -155,6 +156,14 @@ export default function CompatibilityMatrix() {
                         </div>
                     </div>
                 </div>
+                <br />
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-[Cinzel] text-center tracking-wide text-[#d1d5db] drop-shadow-sm">
+                                    💫 Testimoni 💫
+                </p>
+                 <p className="text-lg text-center font-medium text-[#e5e7eb] mb-6">
+                            Lihat kata-kata mereka tentang pengalaman menggunakan jasa full reading kalkulator ini:
+                        </p>
+                <TestimonialCarousel />
             </div>
             <Script src="/inputs_compatibility.js" strategy="lazyOnload" />
         </>
