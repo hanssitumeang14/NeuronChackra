@@ -206,6 +206,8 @@ const fillMatrix = (orang, orangKedua) => {
     ];
 }
 
+//payload for service
+
 function outputCompatibilityMatrixValues() {
     const elements = document.querySelectorAll('[id^="compatibility"]');
     compatibilityMatrix.forEach((matrixItem) => {

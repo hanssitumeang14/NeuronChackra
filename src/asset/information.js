@@ -24,7 +24,7 @@ const sendToServerWithMessage = async (message, idx) => {
   try {
     setLoadingIndex(idx); // Mulai loading
 
-    const response = await fetch('https://mu67a3hmpg.ap-southeast-1.awsapprunner.com/ask', {
+    const response = await fetch('https://mu67a3hmpg.ap-southeast-1.awsapprunner.com/askcouple', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...data, message }),
@@ -52,11 +52,11 @@ const sendToServerWithMessage = async (message, idx) => {
 };
 
   const questions = [
-    'Melihat destiny matrix saya, Apa kelebihan dari diri saya?',
-    'Melihat destiny matrix saya, Apa kelemahan dari diri saya?',
-    'Melihat destiny matrix saya, apa hal yang ada di masa lalu saya yang perlu saya perbaiki untuk masa depan?',
-    'Dengan mencocokkan destiny matrix, apa karir yang cocok untuk saya?',
-    'Bagaimana kriteria yang cocok untuk saya dalam memilih pasangan hidup dengan melihat destiny matrix saya?',
+    'Melihat destiny matrix saya dan pasangan saya, apa kelebihan dari diri saya dan pasangan saya?',
+    'Melihat destiny matrix saya dan pasangan saya, apa kelemahan dari diri saya dan pasangan saya?',
+    'Melihat destiny matrix saya dan pasangan saya, apa hal yang ada di masa lalu saya dan pasangan saya yang perlu diperbaiki untuk masa depan?',
+    'Dengan mencocokkan destiny matrix, apa karir yang cocok untuk saya dan pasangan saya?',
+    'Bagaimana kriteria yang cocok untuk saya dan pasangan saya dalam memilih pasangan hidup dengan melihat destiny matrix kami?',
   ];
 
   return (
