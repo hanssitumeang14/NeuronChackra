@@ -348,7 +348,7 @@ const buttonWa = document.getElementById('buttonWa');
 if (buttonWa) {
   buttonWa.addEventListener('click', () => {
     const phone = '6287861517165';
-    const message = encodeURIComponent('Maaf saya bingung bacanya, mohon penjelasannya yaa.. Terimakasih');
+    const message = encodeURIComponent('Saya tertarik baca full reading, Berapa pricenya ya?');
     const waLink = `https://wa.me/${phone}?text=${message}`;
     window.open(waLink, '_blank');
   });

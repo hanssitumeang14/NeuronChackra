@@ -251,23 +251,39 @@ btnChart.addEventListener('click', (evt) => {
     createPerson(orangKedua, secondApoint, secondBpoint, secondCpoint);
 
      // Tambahkan dataParam di sini
-  window.dataParam = {
+    window.dataParam = {
     person1: {
-      name: inputFirstName.value.trim(),
-      birthdate: fullDateFirst,
-      apoint: apoint,
-      bpoint: bpoint,
-      cpoint: cpoint,
+        name: inputFirstName.value.trim(),
+        date: fullDateFirst,
     },
     person2: {
-      name: inputSecondName.value.trim(),
-      birthdate: fullDateSecond,
-      apoint: secondApoint,
-      bpoint: secondBpoint,
-      cpoint: secondCpoint,
+        name: inputSecondName.value.trim(),
+        date: fullDateSecond,
     },
-    message: '', // bisa diisi kemudian saat kirim pertanyaan
-  };
+    points: compatibilityMatrix.reduce((acc, item) => {
+        const key = item.id.replace("compatibility", "").toLowerCase();
+        acc[key] = item.value;
+        return acc;
+    }, {}),
+    };
+
+//   window.dataParam = {
+//     person1: {
+//       name: inputFirstName.value.trim(),
+//       birthdate: fullDateFirst,
+//       apoint: apoint,
+//       bpoint: bpoint,
+//       cpoint: cpoint,
+//     },
+//     person2: {
+//       name: inputSecondName.value.trim(),
+//       birthdate: fullDateSecond,
+//       apoint: secondApoint,
+//       bpoint: secondBpoint,
+//       cpoint: secondCpoint,
+//     },
+//     message: '', // bisa diisi kemudian saat kirim pertanyaan
+//   };
 
     fillMatrix(orang, orangKedua);
     compatibilityContainer.style.display = 'flex';
@@ -464,7 +480,7 @@ const buttonWa1 = document.getElementById('buttonWa1');
 if (buttonWa1) {
   buttonWa1.addEventListener('click', () => {
     const phone = '6287861517165';
-    const message = encodeURIComponent('Maaf saya bingung bacanya, mohon penjelasannya yaa.. Terimakasih');
+    const message = encodeURIComponent('Saya tertarik baca full reading, Berapa pricenya ya?');
     const waLink = `https://wa.me/${phone}?text=${message}`;
     window.open(waLink, '_blank');
   });
